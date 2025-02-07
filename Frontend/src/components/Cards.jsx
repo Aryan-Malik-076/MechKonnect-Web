@@ -3,6 +3,15 @@ import React from 'react';
 const Card = () => {
   return (
     <div className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden">
+      {/* Image Section */}
+      <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
+        <img
+          src="https://cdn.ferrari.com/cms/network/media/img/resize/6673fe6251b1d700111f8d73-laferrari_20240627_cover_1300x730_v2" // Replace with your car image URL
+          alt="Tesla Model S"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
       {/* Card Header */}
       <div className="bg-gray-800 p-4">
         <h2 className="text-2xl font-bold text-white">Tesla Model S</h2>

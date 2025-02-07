@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const WelcomePage = () => {
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ const WelcomePage = () => {
           >
             Login
           </button>
-          
+      
           <button
             onClick={() => navigate('/signup')}
             className="bg-transparent border border-blue-500 text-blue-500 px-6 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition duration-300"
