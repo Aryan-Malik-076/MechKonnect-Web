@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "name": "Tesla Model S",
+      "imageUrl": "https://cdn.ferrari.com/cms/network/media/img/resize/6673fe6251b1d700111f8d73-laferrari_20240627_cover_1300x730_v2",
+      "description": "Free recharge at any station",
+      "discount": "25% OFF",
+      "configuration": {
+        "passengers": 4,
+        "acceleration": "100 km/h in 4 seconds"
+      },
+      "price": "$168.00"
+    },
+    {
+      "id": 2,
+      "name": "Ford Mustang",
+      "imageUrl": "https://cdn.ferrari.com/cms/network/media/img/resize/6673fe6251b1d700111f8d73-laferrari_20240627_cover_1300x730_v2",
+      "description": "High-performance spare parts",
+      "discount": "15% OFF",
+      "configuration": {
+        "passengers": 2,
+        "acceleration": "100 km/h in 5 seconds"
+      },
+      "price": "$200.00"
+    },
+    {
+      "id": 3,
+      "name": "BMW i8",
+      "imageUrl": "https://cdn.ferrari.com/cms/network/media/img/resize/6673fe6251b1d700111f8d73-laferrari_20240627_cover_1300x730_v2",
+      "description": "Eco-friendly and efficient",
+      "discount": "10% OFF",
+      "configuration": {
+        "passengers": 2,
+        "acceleration": "100 km/h in 4.4 seconds"
+      },
+      "price": "$250.00"
+    }
+  ]

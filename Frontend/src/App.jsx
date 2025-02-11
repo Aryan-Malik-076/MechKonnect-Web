@@ -4,6 +4,8 @@ import WelcomePage from "./components/WelcomePage";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Home from "./components/Home";
+import SparePartsPage from "./components/SparePartsPage";
+
 const App = () => {
   return (
     <Router>
@@ -15,11 +17,13 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/Home" element={<Home />} />
+           < Route path="/spare-parts" element={<SparePartsPage />} />
           </Routes>
         </div>
       </div>
     </Router>
   );
 };
+
 
 export default App;

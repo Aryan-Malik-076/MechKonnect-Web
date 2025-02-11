@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "name": "Brake Pads",
+      "image": "https://example.com/brake-pads.jpg",
+      "description": "High-quality ceramic brake pads for enhanced stopping power.",
+      "price": "$45.99",
+      "discount": "10% OFF"
+    },
+    {
+      "id": 2,
+      "name": "Car Battery",
+      "image": "https://example.com/car-battery.jpg",
+      "description": "Long-lasting car battery with a 2-year warranty.",
+      "price": "$120.00",
+      "discount": "15% OFF"
+    },
+    {
+      "id": 3,
+      "name": "Alloy Wheels",
+      "image": "https://example.com/alloy-wheels.jpg",
+      "description": "Lightweight and durable alloy wheels for a stylish look.",
+      "price": "$250.00",
+      "discount": "20% OFF"
+    }
+  ]
+  

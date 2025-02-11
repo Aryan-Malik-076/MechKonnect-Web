@@ -7,7 +7,7 @@ const images = [
   "https://previews.123rf.com/images/nsit0108/nsit01082305/nsit0108230502464/204655738-car-mechanic-modern-garage-motor-workshop-generate-ai.jpg"
 ];
 
-const Navbar = () => {W
+const Navbar = () => {
   return (
     <div className="navbar bg-gray-800 p-4 shadow-lg flex justify-between items-center">
       <div className="flex items-center">
