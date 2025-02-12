@@ -1,19 +1,36 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import NavBar from "./navbar";
+import Card from "./Card";
+import axios from "axios";
 
 const SparePartsPage = () => {
-  const location = useLocation();
-  const part = location.state?.part;
+  const [spareParts, setSpareParts] = useState([]);
 
-  if (!part) return <h2 className="text-center mt-10 text-xl text-white">No spare part selected.</h2>;
+  useEffect(() => {
+    const fetchSpareParts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/spareParts");
+        setSpareParts(response.data);
+      } catch (error) {
+        console.error("Error fetching spare parts:", error);
+      }
+    };
+
+    fetchSpareParts();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
-      <h1 className="text-3xl font-bold mb-4">{part.name}</h1>
-      <img src={part.imageUrl} alt={part.name} className="w-64 h-64 object-cover rounded-lg shadow-lg mb-4" />
-      <p className="text-lg">{part.description}</p>
-      <span className="text-2xl font-bold">${part.price}</span>
-    </div>
+    <>
+      <NavBar />
+      <div className="min-h-screen bg-black text-white p-4">
+        <h1 className="text-3xl font-bold mb-4 italic underline">All Spare Parts</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {spareParts.map((part) => (
+            <Card key={part._id} part={part} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

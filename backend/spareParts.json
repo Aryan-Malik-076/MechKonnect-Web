@@ -21,11 +21,52 @@
     "discount": 15
   },
   {
-    "name": "oil",
-    "description": "Synthetic engine oil for maximum performance.",
-    "price": 29.99,
-    "imageUrl": "https://media.istockphoto.com/id/1325588832/photo/pouring-motor-oil-for-motor-vehicles-from-a-gray-bottle-into-the-engine.jpg?s=612x612&w=0&k=20&c=8El-cOoOpGSDz-dOjozJn5ijlFOuE1WGQA1hsZvyyMk=",
+    "name": "Transmission Fluid",
+    "description": "High-quality transmission fluid for smooth gear shifts.",
+    "price": 39.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9d2TW_XCON-qa_kUXnt2nZI5vRzN8UZvcKA&s",
+    "discount": 10
+  },
+  {
+    "name": "Air Filter",
+    "description": "Premium air filter for improved engine performance.",
+    "price": 19.99,
+    "imageUrl": "https://media.istockphoto.com/id/583729130/photo/close-up-air-filter-carburettor-motorcycle-on-dark-background.jpg?s=612x612&w=0&k=20&c=jw62A2P-HdgTFr7CTEt2Aq4CrCV1xSju5Cnb_ypbz3g=",
+    "discount": 5
+  },
+  {
+    "name": "Spark Plugs",
+    "description": "Durable spark plugs for efficient ignition.",
+    "price": 24.99,
+    "imageUrl": "https://img.pikbest.com/wp/202405/light-illumination-3d-illustration-of-spark-plugs-illuminated-by-blue-lights-on-black-background-in-close-up-for-car-repair-parts_9837408.jpg!bw700",
+    "discount": 10
+  },
+  {
+    "name": "Windshield Wipers",
+    "description": "High-quality wipers for clear visibility in all weather.",
+    "price": 14.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB3pkRzIg3vSyKnlNzK-CvvySLup0SPQoC3A&s",
+    "discount": 20
+  },
+  {
+    "name": "Coolant",
+    "description": "Advanced coolant for optimal engine temperature control.",
+    "price": 22.99,
+    "imageUrl": "https://media.istockphoto.com/id/1794805084/photo/pour-new-automotive-engine-oil-into-the-engine.jpg?s=612x612&w=0&k=20&c=SIg8YW9HK4ZX9sC5RVRGDBqZt8wpxHH70KSop3KkCX0=",
     "discount": 15
+  },
+  {
+    "name": "Tire Pressure Gauge",
+    "description": "Accurate tire pressure gauge for safe driving.",
+    "price": 9.99,
+    "imageUrl": "https://s7d1.scene7.com/is/image/bridgestone/tire-pressure-monito-hero-learn-na-bst-web-consumer",
+    "discount": 25
+  },
+  {
+    "name": "Car Wax",
+    "description": "Premium car wax for a shiny and protected finish.",
+    "price": 17.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SIfmqGWXssHp8LuDgr1skNfmeR_q33-WQg&s",
+    "discount": 10
   }
-
 ]

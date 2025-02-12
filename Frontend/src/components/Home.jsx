@@ -6,7 +6,9 @@ import axios from "axios";
 
 const Home = () => {
   const [spareParts, setSpareParts] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
+  const [workshops, setWorkshops] = useState([]);
+  const [sparePartIndex, setSparePartIndex] = useState(0);
+  const [workshopIndex, setWorkshopIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,56 +21,104 @@ const Home = () => {
       }
     };
 
+    const fetchWorkshops = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/workshops");
+        setWorkshops(response.data);
+      } catch (error) {
+        console.error("Error fetching workshops:", error);
+      }
+    };
+
     fetchSpareParts();
+    fetchWorkshops();
   }, []);
 
-  const nextSlide = () => {
-    if (startIndex + 3 < spareParts.length) {
-      setStartIndex(startIndex + 3);
+  const navigateToWorkshop = (workshop) => {
+    navigate(`/WorkshopPage/${workshop.name}`);
+  };
+
+  // Slider Functions
+  const nextSpareParts = () => {
+    if (sparePartIndex + 4 < spareParts.length) {
+      setSparePartIndex(sparePartIndex + 4);
     }
   };
 
-  const prevSlide = () => {
-    if (startIndex - 3 >= 0) {
-      setStartIndex(startIndex - 3);
+  const prevSpareParts = () => {
+    if (sparePartIndex - 4 >= 0) {
+      setSparePartIndex(sparePartIndex - 4);
+    }
+  };
+
+  const nextWorkshops = () => {
+    if (workshopIndex + 4 < workshops.length) {
+      setWorkshopIndex(workshopIndex + 4);
+    }
+  };
+
+  const prevWorkshops = () => {
+    if (workshopIndex - 4 >= 0) {
+      setWorkshopIndex(workshopIndex - 4);
     }
   };
 
   return (
     <>
       <NavBar />
-      <div className="min-h-screen bg-black text-white flex flex-col items-start justify-left p-4 relative">
-        <h1 className="text-3xl font-bold mb-4 italic underline">Recently Added</h1>
-        
-        {/* Custom Carousel */}
-        <div className="carousel w-full flex gap-4 overflow-hidden p-4 relative">
-          {/* Previous Arrow Button */}
-          {startIndex > 0 && (
+      <div className="min-h-screen bg-black text-white flex flex-col items-start p-4 relative">
+        {/* Spare Parts Section */}
+        <h1 className="text-3xl font-bold mb-4 italic underline">Recently Added Spare Parts</h1>
+        <div className="relative w-full">
+          <div className="flex gap-4 overflow-hidden p-4">
+            {spareParts.slice(sparePartIndex, sparePartIndex + 4).map((part) => (
+              <Card key={part._id} part={part} />
+            ))}
+          </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between w-full px-4 mt-2">
             <button
-              onClick={prevSlide}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full opacity-0 hover:opacity-100 transition-opacity"
+              onClick={prevSpareParts}
+              className={`bg-gray-800 text-white p-3 rounded-full ${sparePartIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              disabled={sparePartIndex === 0}
             >
               ❮
             </button>
-          )}
-          
-          {spareParts.slice(startIndex, startIndex + 3).map((part) => (
-            <div key={part._id} className="carousel-item w-1/3 flex justify-center">
-              <div onClick={() => navigate("/spareparts")} className="cursor-pointer w-full max-w-xs">
-                <Card part={part} />
-              </div>
-            </div>
-          ))}
-          
-          {/* Next Arrow Button */}
-          {startIndex + 3 < spareParts.length && (
             <button
-              onClick={nextSlide}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-3 rounded-full opacity-0 hover:opacity-100 transition-opacity"
+              onClick={nextSpareParts}
+              className={`bg-gray-800 text-white p-3 rounded-full ${sparePartIndex + 4 >= spareParts.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              disabled={sparePartIndex + 4 >= spareParts.length}
             >
               ❯
             </button>
-          )}
+          </div>
+        </div>
+
+        {/* Workshops Section */}
+        <h1 className="text-3xl font-bold mt-8 mb-4 italic underline">Workshops</h1>
+        <div className="relative w-full">
+          <div className="flex gap-4 overflow-hidden p-4">
+            {workshops.slice(workshopIndex, workshopIndex + 4).map((workshop) => (
+              <Card key={workshop.name} part={workshop} isWorkshop={true} onClick={() => navigateToWorkshop(workshop)} />
+            ))}
+          </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between w-full px-4 mt-2">
+            <button
+              onClick={prevWorkshops}
+              className={`bg-gray-800 text-white p-3 rounded-full ${workshopIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              disabled={workshopIndex === 0}
+            >
+              ❮
+            </button>
+            <button
+              onClick={nextWorkshops}
+              className={`bg-gray-800 text-white p-3 rounded-full ${workshopIndex + 4 >= workshops.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              disabled={workshopIndex + 4 >= workshops.length}
+            >
+              ❯
+            </button>
+          </div>
         </div>
       </div>
     </>

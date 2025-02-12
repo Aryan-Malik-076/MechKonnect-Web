@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 const images = [
   "https://img.freepik.com/premium-photo/auto-mechanic-repairing-car-engine-auto-repair-shop-car-service-maintenance-concept-generative-ai_804788-123799.jpg?w=826",
   "https://img.freepik.com/premium-photo/auto-mechanic-working-car-mechanics-garage-ai-generative_955712-3042.jpg?w=996",
@@ -32,7 +31,7 @@ const Carousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 10000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 

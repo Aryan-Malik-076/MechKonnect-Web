@@ -1,0 +1,65 @@
+[
+  {
+    "name": "AutoFix Karachi",
+    "description": "Professional car repair services in Karachi.",
+    "price": 0,
+    "imageUrl": "https://static.vecteezy.com/system/resources/thumbnails/024/614/272/small_2x/nighttime-garage-service-men-repairing-metal-machinery-for-transportation-industry-generated-by-ai-free-photo.jpg",
+    "discount": 0
+  },
+  {
+    "name": "Lahore Car Care",
+    "description": "Reliable car maintenance in Lahore City.",
+    
+    "imageUrl": "https://t4.ftcdn.net/jpg/05/91/37/93/360_F_591379399_f6aNuUwPYFRYpmId90bLgEgohrKwrazF.jpg",
+    "discount": 5
+  },
+  {
+    "name": "Islamabad AutoWorks",
+    "description": "Top-notch car and motorvehicles repairs in Islamabad.",
+    "price": 29.99,
+    "imageUrl": "https://w0.peakpx.com/wallpaper/375/375/HD-wallpaper-car-workshop-digital-art-artist-artwork-artstation-thumbnail.jpg",
+    "discount": 15
+  },
+  {
+    "name": "Peshawar Mechanic",
+    "description": "Trusted car services in Peshawar City.",
+    "price": 39.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5mMLyXR0c-KShLRX7LEvG_p18JLMpogG_lQ&s",
+    "discount": 10
+  },
+  {
+    "name": "Quetta Auto Solutions",
+    "description": "Efficient car repairs in Quetta City.",
+    "price": 19.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzXho6L5MSUgQdeabcO3mwEx35foCwwxC-8XT1Yf7ctiAhqkh3BFqWcWn3yOB8ibNIQPs&usqp=CAU",
+    "discount": 5
+  },
+  {
+    "name": "Faisalabad Car Clinic",
+    "description": "Expert car maintenance in Faisalabad City.",
+    "price": 24.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqCukyMrcCDEhyiG57K22ej7-xYucFUdamw&s",
+    "discount": 10
+  },
+  {
+    "name": "Rawalpindi AutoCare",
+    "description": "Quality car repairs in Rawalpindi City.",
+    "price": 14.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxpf2_jQh4l8zgL90pAf-Q30wg5JV9UjQdrg&s",
+    "discount": 20
+  },
+  {
+    "name": "Multan Car Workshop",
+    "description": "Affordable car services in Multan City.",
+    "price": 22.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDXJgzdV9QuHIcdIihfLl5OrvdDK3wGNXyOA&s",
+    "discount": 15
+  },
+  {
+    "name": "Gujranwala AutoFix",
+    "description": "Professional car repairs in Gujranwala City.",
+    "price": 9.99,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdDVAipZbvRaoWL_398CwxkMtJL45LgAnUbw&s",
+    "discount": 25
+  }
+]
