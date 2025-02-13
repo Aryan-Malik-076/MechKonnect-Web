@@ -95,7 +95,7 @@ const Home = () => {
         </div>
 
         {/* Workshops Section */}
-        <h1 className="text-3xl font-bold mt-8 mb-4 italic underline">Workshops</h1>
+        <h1 className="text-3xl font-bold mt-8 mb-4 italic underline">Popular Workshops</h1>
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
             {workshops.slice(workshopIndex, workshopIndex + 4).map((workshop) => (
@@ -116,6 +116,7 @@ const Home = () => {
               className={`bg-gray-800 text-white p-3 rounded-full ${workshopIndex + 4 >= workshops.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
               disabled={workshopIndex + 4 >= workshops.length}
             >
+              
               ❯
             </button>
           </div>
