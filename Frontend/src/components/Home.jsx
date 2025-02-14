@@ -1,3 +1,4 @@
+// src/components/Home.js
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./navbar";
@@ -34,8 +35,12 @@ const Home = () => {
     fetchWorkshops();
   }, []);
 
-  const navigateToWorkshop = (workshop) => {
-    navigate(`/WorkshopPage/${workshop.name}`);
+  const navigateToSparePartsPage = () => {
+    navigate("/spare-parts"); // Navigate to SparePartsPage
+  };
+
+  const navigateToWorkshopPage = () => {
+    navigate("/workshop"); // Navigate to WorkshopPage
   };
 
   // Slider Functions
@@ -72,21 +77,25 @@ const Home = () => {
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
             {spareParts.slice(sparePartIndex, sparePartIndex + 4).map((part) => (
-              <Card key={part._id} part={part} />
+              <Card key={part._id} part={part} onClick={navigateToSparePartsPage} />
             ))}
           </div>
           {/* Navigation Buttons */}
           <div className="flex justify-between w-full px-4 mt-2">
             <button
               onClick={prevSpareParts}
-              className={`bg-gray-800 text-white p-3 rounded-full ${sparePartIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              className={`bg-gray-800 text-white p-3 rounded-full ${
+                sparePartIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
+              }`}
               disabled={sparePartIndex === 0}
             >
               ❮
             </button>
             <button
               onClick={nextSpareParts}
-              className={`bg-gray-800 text-white p-3 rounded-full ${sparePartIndex + 4 >= spareParts.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              className={`bg-gray-800 text-white p-3 rounded-full ${
+                sparePartIndex + 4 >= spareParts.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
+              }`}
               disabled={sparePartIndex + 4 >= spareParts.length}
             >
               ❯
@@ -99,24 +108,32 @@ const Home = () => {
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
             {workshops.slice(workshopIndex, workshopIndex + 4).map((workshop) => (
-              <Card key={workshop.name} part={workshop} isWorkshop={true} onClick={() => navigateToWorkshop(workshop)} />
+              <Card
+                key={workshop.name}
+                part={workshop}
+                isWorkshop={true}
+                onClick={navigateToWorkshopPage}
+              />
             ))}
           </div>
           {/* Navigation Buttons */}
           <div className="flex justify-between w-full px-4 mt-2">
             <button
               onClick={prevWorkshops}
-              className={`bg-gray-800 text-white p-3 rounded-full ${workshopIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              className={`bg-gray-800 text-white p-3 rounded-full ${
+                workshopIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
+              }`}
               disabled={workshopIndex === 0}
             >
               ❮
             </button>
             <button
               onClick={nextWorkshops}
-              className={`bg-gray-800 text-white p-3 rounded-full ${workshopIndex + 4 >= workshops.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"}`}
+              className={`bg-gray-800 text-white p-3 rounded-full ${
+                workshopIndex + 4 >= workshops.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
+              }`}
               disabled={workshopIndex + 4 >= workshops.length}
             >
-              
               ❯
             </button>
           </div>

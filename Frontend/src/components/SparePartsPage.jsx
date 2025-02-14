@@ -1,7 +1,7 @@
+// src/components/SparePartsPage.js
 import React, { useEffect, useState } from "react";
-import NavBar from "./navbar";
-import Card from "./Card";
 import axios from "axios";
+import Card from "./Card"; // Reuse the Card component
 
 const SparePartsPage = () => {
   const [spareParts, setSpareParts] = useState([]);
@@ -20,17 +20,14 @@ const SparePartsPage = () => {
   }, []);
 
   return (
-    <>
-      <NavBar />
-      <div className="min-h-screen bg-black text-white p-4">
-        <h1 className="text-3xl font-bold mb-4 italic underline">All Spare Parts</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {spareParts.map((part) => (
-            <Card key={part._id} part={part} />
-          ))}
-        </div>
+    <div className="min-h-screen bg-black text-white p-4">
+      <h1 className="text-3xl font-bold mb-4 italic underline">All Spare Parts</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {spareParts.map((part) => (
+          <Card key={part._id} part={part} />
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 
