@@ -1,6 +1,7 @@
+// src/components/Card.jsx
 import React from "react";
 
-const Card = ({ part, isWorkshop = false, onClick }) => {
+const Card = ({ part, isWorkshop = false, serviceName, onClick }) => {
   return (
     <div
       className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:bg-gray-100 cursor-pointer"
@@ -24,11 +25,8 @@ const Card = ({ part, isWorkshop = false, onClick }) => {
       <div className="p-6">
         <p className="text-gray-600 mb-4">{part.description}</p>
         <div className="flex items-center justify-between">
-          {!isWorkshop && (
-            <span className="text-2xl font-bold text-gray-800">${part.price}</span>
-          )}
           <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-            {isWorkshop ? "Appointment" : "Buy Now"}
+            {serviceName || (isWorkshop ? "Appointment" : "Buy Now")}
           </button>
         </div>
       </div>

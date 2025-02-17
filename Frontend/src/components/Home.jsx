@@ -1,9 +1,15 @@
-// src/components/Home.js
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./navbar";
+import NavBar from "./Navbar";
 import Card from "./Card";
+import Carousel from "./Carousel";  // Import Carousel
 import axios from "axios";
+
+const homeImages = [
+  "https://img.freepik.com/premium-photo/auto-mechanic-repairing-car-engine-auto-repair-shop-car-service-maintenance-concept-generative-ai_804788-123799.jpg?w=826",
+  "https://img.freepik.com/premium-photo/auto-mechanic-working-car-mechanics-garage-ai-generative_955712-3042.jpg?w=996",
+  "https://previews.123rf.com/images/nsit0108/nsit01082305/nsit0108230502464/204655738-car-mechanic-modern-garage-motor-workshop-generate-ai.jpg",
+];
 
 const Home = () => {
   const [spareParts, setSpareParts] = useState([]);
@@ -35,13 +41,8 @@ const Home = () => {
     fetchWorkshops();
   }, []);
 
-  const navigateToSparePartsPage = () => {
-    navigate("/spare-parts"); // Navigate to SparePartsPage
-  };
-
-  const navigateToWorkshopPage = () => {
-    navigate("/workshop"); // Navigate to WorkshopPage
-  };
+  const navigateToSparePartsPage = () => navigate("/spare-parts");
+  const navigateToWorkshopPage = () => navigate("/workshop");
 
   // Slider Functions
   const nextSpareParts = () => {
@@ -71,6 +72,7 @@ const Home = () => {
   return (
     <>
       <NavBar />
+      <Carousel images={homeImages} /> {/* Add Carousel at the top */}
       <div className="min-h-screen bg-black text-white flex flex-col items-start p-4 relative">
         {/* Spare Parts Section */}
         <h1 className="text-3xl font-bold mb-4 italic underline">Recently Added Spare Parts</h1>
@@ -108,12 +110,7 @@ const Home = () => {
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
             {workshops.slice(workshopIndex, workshopIndex + 4).map((workshop) => (
-              <Card
-                key={workshop.name}
-                part={workshop}
-                isWorkshop={true}
-                onClick={navigateToWorkshopPage}
-              />
+              <Card key={workshop.name} part={workshop} isWorkshop={true} onClick={navigateToWorkshopPage} />
             ))}
           </div>
           {/* Navigation Buttons */}
