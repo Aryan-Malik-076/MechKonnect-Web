@@ -18,6 +18,7 @@
         "@tabler/icons-react": "^3.29.0",
         "axios": "^1.7.9",
         "leaflet": "^1.9.4",
+        "lucide-react": "^0.475.0",
         "react": "^19.0.0-rc.1",
         "react-dom": "^19.0.0-rc.1",
         "react-hook-form": "^7.51.1",
