@@ -1,0 +1,73 @@
+[
+    {
+      "name": "Ali Auto Repairs",
+      "description": "Experienced roadside mechanic in Attock.",
+      "latitude": 33.7665,
+      "longitude": 72.3581,
+      "recommendations": 4.8
+    },
+    {
+      "name": "Hassan Auto Workshop",
+      "description": "Expert in car breakdown repairs.",
+      "latitude": 33.6844,
+      "longitude": 73.0479,
+      "recommendations": 4.5
+    },
+    {
+      "name": "Kamra Auto Fix",
+      "description": "Quick repairs for all vehicle types.",
+      "latitude": 33.7516,
+      "longitude": 72.4323,
+      "recommendations": 4.7
+    },
+    {
+      "name": "Attock Roadside Assistance",
+      "description": "24/7 emergency roadside support.",
+      "latitude": 33.7730,
+      "longitude": 72.3605,
+      "recommendations": 4.6
+    },
+    {
+      "name": "Speedy Auto Care",
+      "description": "Fast service for breakdowns and maintenance.",
+      "latitude": 33.7562,
+      "longitude": 72.3657,
+      "recommendations": 4.4
+    },
+    {
+      "name": "Maqsood Auto Garage",
+      "description": "Reliable auto repair in Kamra.",
+      "latitude": 33.7465,
+      "longitude": 72.4287,
+      "recommendations": 4.9
+    },
+    {
+      "name": "Rehman Car Solutions",
+      "description": "Specialist in car engine repairs.",
+      "latitude": 33.7652,
+      "longitude": 72.3728,
+      "recommendations": 4.3
+    },
+    {
+      "name": "Zubair Motors",
+      "description": "Affordable and reliable mechanic services.",
+      "latitude": 33.7598,
+      "longitude": 72.3804,
+      "recommendations": 4.5
+    },
+    {
+      "name": "Tariq Auto Rescue",
+      "description": "Emergency vehicle breakdown support.",
+      "latitude": 33.7412,
+      "longitude": 72.4103,
+      "recommendations": 4.7
+    },
+    {
+      "name": "Safe Drive Mechanics",
+      "description": "Car repair and towing services.",
+      "latitude": 33.7683,
+      "longitude": 72.3569,
+      "recommendations": 4.6
+    }
+  ]
+  

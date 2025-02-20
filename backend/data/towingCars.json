@@ -1,0 +1,13 @@
+[
+    { "name": "Truck 1", "lat": 33.6844, "lng": 73.0479 },
+    { "name": "Truck 2", "lat": 33.6938, "lng": 73.0652 },
+    { "name": "Truck 3", "lat": 33.7061, "lng": 73.0510 },
+    { "name": "Truck 4", "lat": 33.7215, "lng": 73.0433 },
+    { "name": "Truck 5", "lat": 33.7715, "lng": 72.3581 },
+    { "name": "Truck 6", "lat": 33.7687, "lng": 72.3668 },
+    { "name": "Truck 7", "lat": 33.7590, "lng": 72.3745 },
+    { "name": "Truck 8", "lat": 33.7545, "lng": 72.3699 },
+    { "name": "Truck 9", "lat": 33.7478, "lng": 72.3605 },
+    { "name": "Truck 10", "lat": 33.7402, "lng": 72.3550 }
+  ]
+  

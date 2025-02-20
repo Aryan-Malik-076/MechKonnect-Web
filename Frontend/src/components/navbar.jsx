@@ -1,40 +1,43 @@
 // src/components/Navbar.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div className="navbar bg-gray-800 p-4 shadow-lg flex justify-between items-center">
       <div className="flex items-center">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy_1iTRinc7ejZLkHzvidWR9ck1xHso99e-A&s"
-          alt="MechKonnect Logo"
-          className="h-10 w-10 mr-2"
-        />
-        <a className="text-2xl font-bold text-white hover:text-blue-400 transition duration-300 cursor-pointer">
+        <Link to="/Home">
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy_1iTRinc7ejZLkHzvidWR9ck1xHso99e-A&s"
+            alt="MechKonnect Logo"
+            className="h-10 w-10 mr-2"
+          />
+        </Link>
+        <Link to="/Home" className="text-2xl font-bold text-white hover:text-blue-400 transition duration-300 cursor-pointer">
           MechKonnect
-        </a>
+        </Link>
       </div>
       <div className="hidden lg:flex">
         <ul className="flex space-x-6">
           <li>
-            <a className="text-white hover:text-blue-400 transition duration-300" href="#home">
+            <Link to="/Home" className="text-white hover:text-blue-400 transition duration-300">
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="text-white hover:text-blue-400 transition duration-300" href="#workshops">
+            <Link to="/workshop" className="text-white hover:text-blue-400 transition duration-300">
               Workshops
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="text-white hover:text-blue-400 transition duration-300" href="#requests">
+            <Link to="/Request" className="text-white hover:text-blue-400 transition duration-300">
               Requests
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="text-white hover:text-blue-400 transition duration-300" href="#spare-parts">
+            <Link to="/spare-parts" className="text-white hover:text-blue-400 transition duration-300">
               Spare Parts
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
