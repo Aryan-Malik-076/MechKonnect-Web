@@ -1,50 +1,43 @@
-// src/components/MechanicCard.jsx
 import React from "react";
 
 const MechanicCard = ({ mechanic, onClose, onConfirm }) => {
-  if (!mechanic) return null;
+  if (!mechanic) return null; // Don't render if no mechanic is selected
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="max-w-md bg-white rounded-lg shadow-2xl overflow-hidden transform transition duration-300 relative">
-        {/* Close Button */}
+    <div className="fixed bottom-4 right-4 w-80 bg-white shadow-lg rounded-lg p-4 z-50">
+      {/* Mechanic Image (Replace with actual image if available) */}
+      <div className="w-full h-40 bg-gray-200 flex items-center justify-center rounded-md">
+        <img
+          src="https://via.placeholder.com/150" // Replace with actual image
+          alt={mechanic.name}
+          className="w-full h-full object-cover rounded-md"
+        />
+      </div>
+
+      {/* Mechanic Details */}
+      <h2 className="text-xl font-bold mt-2">{mechanic.name}</h2>
+      <p className="text-gray-600">{mechanic.description}</p>
+      
+      {/* Rating & Price */}
+      <div className="flex items-center justify-between mt-2">
+        <span className="text-yellow-500">⭐ {mechanic.recommendations}</span>
+        <span className="text-gray-700 font-semibold">💰 {mechanic.initialCharge} PKR</span>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-between mt-4">
         <button
+          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
           onClick={onClose}
-          className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
         >
-          ✕
+          Cancel
         </button>
-
-        {/* Image Section */}
-        <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
-          <img
-            src={mechanic.image || "/placeholder.png"} // Default image
-            alt={mechanic.name}
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Card Header */}
-        <div className="bg-gray-800 p-4">
-          <h2 className="text-2xl font-bold text-white">{mechanic.name}</h2>
-        </div>
-
-        {/* Card Body */}
-        <div className="p-6">
-          <p className="text-gray-600 mb-4">{mechanic.description}</p>
-          <p className="text-lg font-semibold">⭐ {mechanic.recommendations} Rating</p>
-          <p className="text-lg font-semibold">Initial Charge: 300 PKR</p>
-
-          {/* Confirm Button */}
-          <div className="flex justify-center mt-4">
-            <button
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-              onClick={onConfirm}
-            >
-              Confirm & Start Tracking
-            </button>
-          </div>
-        </div>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={() => onConfirm(mechanic)}
+        >
+          Confirm
+        </button>
       </div>
     </div>
   );

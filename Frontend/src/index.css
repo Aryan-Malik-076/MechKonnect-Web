@@ -1,3 +1,4 @@
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@500&display=swap");
 
 @tailwind base;
@@ -7,3 +8,4 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+
