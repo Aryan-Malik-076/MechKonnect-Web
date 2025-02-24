@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, LayersControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import "leaflet-fullscreen"; // ✅ Corrected import for fullscreen
-import "@fortawesome/fontawesome-free/css/all.min.css"; // ✅ FontAwesome icons
+import "leaflet-fullscreen"; // Import the fullscreen plugin
+import "leaflet-fullscreen/dist/leaflet.fullscreen.css"; // Import the fullscreen CSS
+import "@fortawesome/fontawesome-free/css/all.min.css"; // FontAwesome icons
 
 // Function to create custom FontAwesome icons
 const createCustomIcon = (iconClass, color) => {
@@ -38,12 +39,16 @@ const MapComponent = ({ setSelectedMechanic }) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          const { latitude, longitude } = position.coords;
+          console.log("User Location:", latitude, longitude); // Debugging
+          setUserLocation([latitude, longitude]);
         },
         (error) => {
           console.error("Geolocation error:", error);
         }
       );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
     }
   }, []);
 
@@ -62,7 +67,13 @@ const MapComponent = ({ setSelectedMechanic }) => {
       zoom={13}
       style={{ height: "100vh", width: "100%" }}
       whenCreated={(map) => {
-        L.control.fullscreen({ position: "topright" }).addTo(map); // ✅ Adds fullscreen control
+        // Add fullscreen control
+        L.control.fullscreen({
+          position: "topright", // Position of the button
+          title: "Toggle Fullscreen", // Tooltip text
+          titleCancel: "Exit Fullscreen", // Tooltip text when in fullscreen
+          forceSeparateButton: true, // Force a separate button (not combined with other controls)
+        }).addTo(map);
       }}
     >
       <LayersControl position="topright">
