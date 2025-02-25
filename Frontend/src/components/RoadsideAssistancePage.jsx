@@ -1,7 +1,6 @@
-// RoadsideAssistancePage.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./Navbar";
+import Navbar from "./navbar";
 import Carousel from "./Carousel";
 import Card from "./Card";
 
@@ -34,9 +33,13 @@ const RoadsideAssistancePage = () => {
 
   return (
     <>
-      <NavBar /> {/* Navbar for navigation */}
-      <Carousel images={roadsideImages} /> {/* Carousel with roadside assistance images */}
+      {/* Navbar for navigation */}
+      <Navbar />
 
+      {/* Carousel with roadside assistance images */}
+      <Carousel images={roadsideImages} />
+
+      {/* Main Content */}
       <div className="min-h-screen bg-black text-white p-6">
         <h1 className="text-4xl font-bold italic underline mb-6 text-center">
           Roadside Assistance
@@ -45,6 +48,7 @@ const RoadsideAssistancePage = () => {
           Get quick help when you need it the most.
         </p>
 
+        {/* Cards Section */}
         <div className="flex flex-wrap justify-center gap-6">
           {cardsData.map((card) => (
             <div

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./Navbar";
+import NavBar from "./navbar";
 import Card from "./Card";
 import Carousel from "./Carousel";  // Import Carousel
 import axios from "axios";

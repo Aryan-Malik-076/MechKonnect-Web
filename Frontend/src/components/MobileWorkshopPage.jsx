@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "./Navbar";
+import Navbar from "./navbar";
 import MapComponent from "./MapComponent";
 
 const MobileWorkshopPage = () => {
@@ -7,7 +7,7 @@ const MobileWorkshopPage = () => {
 
   return (
     <>
-      <NavBar />
+      <Navbar />
       <div className="min-h-screen bg-black text-white p-6">
         <h1 className="text-4xl font-bold italic underline mb-6 text-center">
           Mobile Workshop Service

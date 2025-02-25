@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NavBar from "./Navbar";
+import NavBar from "./navbar";
 import Carousel from "./Carousel";
 import Card from "./Card"; // Reuse the Card component
 

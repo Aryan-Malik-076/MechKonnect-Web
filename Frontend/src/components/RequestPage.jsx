@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./Navbar";
+import NavBar from "./navbar";
 import Carousel from "./Carousel";
 import Card from "./Card"; // Import the Card component
 

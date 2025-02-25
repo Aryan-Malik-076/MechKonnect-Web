@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./Navbar";
+import Navbar from "./navbar";
 import TowingService from "./TowingService";
 
 const UpliftingPage = () => (
