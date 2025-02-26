@@ -1,41 +1,22 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "./navbar";
+import React, { useState } from "react";
 import MapComponent from "./MapComponent";
 
 const MobileWorkshopPage = () => {
   const [selectedMechanic, setSelectedMechanic] = useState(null);
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-black text-white p-6">
-        <h1 className="text-4xl font-bold italic underline mb-6 text-center">
-          Mobile Workshop Service
-        </h1>
-        <p className="text-center mb-8 text-lg">
-          Get a mobile workshop to your location.
-        </p>
-        
-        {/* Map Component */}
-        <MapComponent setSelectedMechanic={setSelectedMechanic} />
-
-        {/* Mechanic Info Card */}
-        {selectedMechanic && (
-          <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white text-black p-4 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold">{selectedMechanic.name}</h2>
-            <p className="text-sm text-gray-600">{selectedMechanic.description}</p>
-            <p className="text-sm">⭐ {selectedMechanic.recommendations} Rating</p>
-            <p className="text-lg font-semibold">Initial Charge: 300 PKR</p>
-            <button
-              onClick={() => console.log("Tracking Started")}
-              className="mt-3 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700"
-            >
-              Confirm & Start Tracking
-            </button>
-          </div>
-        )}
-      </div>
-    </>
+    <div>
+      <h1 className="text-center text-2xl font-bold my-4">Mobile Workshop</h1>
+      <MapComponent setSelectedMechanic={setSelectedMechanic} />
+      {selectedMechanic && (
+        <div className="p-4 border rounded-md shadow-lg bg-white fixed bottom-10 left-1/2 transform -translate-x-1/2">
+          <h2 className="text-lg font-semibold">{selectedMechanic.name}</h2>
+          <p>{selectedMechanic.description}</p>
+          <p>⭐ {selectedMechanic.recommendations} Rating</p>
+          <p className="text-lg font-bold">Initial Charge: {selectedMechanic.initialCharge} PKR</p>
+        </div>
+      )}
+    </div>
   );
 };
 
