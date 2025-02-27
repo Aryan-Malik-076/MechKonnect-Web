@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
 import NavBar from "./navbar";
 import Carousel from "./Carousel";
@@ -14,6 +15,7 @@ const SparePartsPage = () => {
   const [spareParts, setSpareParts] = useState([]);
   const [selectedPart, setSelectedPart] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchSpareParts = async () => {
@@ -39,9 +41,8 @@ const SparePartsPage = () => {
   };
 
   const handleConfirmPurchase = () => {
-    // Handle the purchase confirmation logic here
-    alert("Purchase confirmed!");
-    handleClosePopup();
+    // Navigate to the payment page and pass selected part data
+    navigate("/payment", { state: { selectedPart } });
   };
 
   return (
@@ -52,11 +53,7 @@ const SparePartsPage = () => {
         <h1 className="text-3xl font-bold mb-4 italic underline">All Spare Parts</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {spareParts.map((part) => (
-            <Card
-              key={part._id}
-              part={part}
-              onBuyNowClick={handleBuyNowClick} // Pass Buy Now handler
-            />
+            <Card key={part._id} part={part} onBuyNowClick={handleBuyNowClick} />
           ))}
         </div>
       </div>
@@ -66,7 +63,7 @@ const SparePartsPage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white text-black p-6 rounded-lg w-11/12 max-w-md">
             <img
-              src={selectedPart.imageUrl} // Use the correct field name
+              src={selectedPart.imageUrl}
               alt={selectedPart.name}
               className="w-full h-48 object-cover rounded-lg"
             />

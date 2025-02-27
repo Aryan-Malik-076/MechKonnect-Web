@@ -1,10 +1,10 @@
 import React from "react";
 
-const Card = ({ part, isWorkshop = false, serviceName, onClick, onBuyNowClick }) => {
+const Card = ({ part, isWorkshop = false, serviceName, onClick, onBuyNowClick, isHomePage }) => {
   return (
     <div
       className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:bg-gray-100 cursor-pointer"
-      onClick={isWorkshop ? onClick : undefined} // Navigate only for workshops
+      onClick={isHomePage ? onClick : undefined} // Navigate for spare parts on home page
     >
       {/* Image Section */}
       <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
