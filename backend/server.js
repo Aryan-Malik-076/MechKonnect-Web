@@ -6,7 +6,8 @@ import authRoutes from "./routes/authRoutes.js";
 import sparePartsRoutes from "./routes/spareParts.js";
 import workshopRoutes from "./routes/workshopRoutes.js";
 import mechanicRoutes from "./routes/mechanicRoutes.js";
-import paymentRoutes from "./routes/paymentRoutes.js"; // ✅ Payment route added
+import payment from "./routes/payment.js";
+import trackingRoutes from "./routes/trackingRoutes.js"; 
 
 dotenv.config();
 const app = express();
@@ -18,10 +19,7 @@ app.use(express.json());
 // ✅ MongoDB Connection with Error Handling
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB Connected");
   } catch (error) {
     console.error("❌ MongoDB Connection Error:", error);
@@ -36,7 +34,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/spareParts", sparePartsRoutes);
 app.use("/api/workshops", workshopRoutes);
 app.use("/api/mechanics", mechanicRoutes);
-app.use("/api/payment", paymentRoutes); // ✅ Payment API route included
+app.use("/api/payment", payment);
+ app.use("/api/tracking", trackingRoutes); // Uncomment this if trackingRoutes.js exists
 
 // ✅ Root Endpoint
 app.get("/", (req, res) => {

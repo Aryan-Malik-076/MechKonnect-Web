@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./navbar";
 import Card from "./Card";
-import Carousel from "./Carousel";  // Import Carousel
+import Carousel from "./Carousel";
 import axios from "axios";
 
 const homeImages = [
@@ -44,64 +44,19 @@ const Home = () => {
   const navigateToSparePartsPage = () => navigate("/spare-parts");
   const navigateToWorkshopPage = () => navigate("/workshop");
 
-  // Slider Functions
-  const nextSpareParts = () => {
-    if (sparePartIndex + 4 < spareParts.length) {
-      setSparePartIndex(sparePartIndex + 4);
-    }
-  };
-
-  const prevSpareParts = () => {
-    if (sparePartIndex - 4 >= 0) {
-      setSparePartIndex(sparePartIndex - 4);
-    }
-  };
-
-  const nextWorkshops = () => {
-    if (workshopIndex + 4 < workshops.length) {
-      setWorkshopIndex(workshopIndex + 4);
-    }
-  };
-
-  const prevWorkshops = () => {
-    if (workshopIndex - 4 >= 0) {
-      setWorkshopIndex(workshopIndex - 4);
-    }
-  };
-
   return (
     <>
       <NavBar />
-      <Carousel images={homeImages} /> {/* Add Carousel at the top */}
+      <Carousel images={homeImages} />
       <div className="min-h-screen bg-black text-white flex flex-col items-start p-4 relative">
+        
         {/* Spare Parts Section */}
         <h1 className="text-3xl font-bold mb-4 italic underline">Recently Added Spare Parts</h1>
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
             {spareParts.slice(sparePartIndex, sparePartIndex + 4).map((part) => (
-              <Card key={part._id} part={part} onClick={navigateToSparePartsPage} />
+              <Card key={part._id} part={part} onClick={navigateToSparePartsPage} isHomePage />
             ))}
-          </div>
-          {/* Navigation Buttons */}
-          <div className="flex justify-between w-full px-4 mt-2">
-            <button
-              onClick={prevSpareParts}
-              className={`bg-gray-800 text-white p-3 rounded-full ${
-                sparePartIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
-              }`}
-              disabled={sparePartIndex === 0}
-            >
-              ❮
-            </button>
-            <button
-              onClick={nextSpareParts}
-              className={`bg-gray-800 text-white p-3 rounded-full ${
-                sparePartIndex + 4 >= spareParts.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
-              }`}
-              disabled={sparePartIndex + 4 >= spareParts.length}
-            >
-              ❯
-            </button>
           </div>
         </div>
 
@@ -112,27 +67,6 @@ const Home = () => {
             {workshops.slice(workshopIndex, workshopIndex + 4).map((workshop) => (
               <Card key={workshop.name} part={workshop} isWorkshop={true} onClick={navigateToWorkshopPage} />
             ))}
-          </div>
-          {/* Navigation Buttons */}
-          <div className="flex justify-between w-full px-4 mt-2">
-            <button
-              onClick={prevWorkshops}
-              className={`bg-gray-800 text-white p-3 rounded-full ${
-                workshopIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
-              }`}
-              disabled={workshopIndex === 0}
-            >
-              ❮
-            </button>
-            <button
-              onClick={nextWorkshops}
-              className={`bg-gray-800 text-white p-3 rounded-full ${
-                workshopIndex + 4 >= workshops.length ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
-              }`}
-              disabled={workshopIndex + 4 >= workshops.length}
-            >
-              ❯
-            </button>
           </div>
         </div>
       </div>

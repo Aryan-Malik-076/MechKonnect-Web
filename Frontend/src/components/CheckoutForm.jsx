@@ -1,68 +1,83 @@
 import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { Loader } from "lucide-react";
 
-const Button = ({ children, onClick, disabled }) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
-  >
-    {children}
-  </button>
-);
+const CheckoutForm = ({ onSuccessfulPayment, userId, mechanicId }) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const [processing, setProcessing] = useState(false);
+    const [error, setError] = useState("");
 
-const CheckoutForm = ({ onSuccessfulPayment }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setProcessing(true);
+        setError("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+        if (!stripe || !elements) {
+            setError("Stripe has not loaded yet.");
+            setProcessing(false);
+            return;
+        }
 
-    if (!stripe || !elements) {
-      setError("Stripe is not properly loaded.");
-      setLoading(false);
-      return;
-    }
+        const cardElement = elements.getElement(CardElement);
+        const { error, token } = await stripe.createToken(cardElement);
 
-    const cardElement = elements.getElement(CardElement);
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-    });
+        console.log("Generated Token:", token); // Debugging log
 
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
-      console.log("Payment successful!", paymentMethod);
-      onSuccessfulPayment(paymentMethod);
-    }
-  };
+        if (error) {
+            console.error("Stripe Error:", error);
+            setError(error.message);
+            setProcessing(false);
+            return;
+        }
 
-  return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-bold text-gray-800 text-center mb-4">💳 Enter Payment Details</h2>
+        try {
+            const response = await fetch("http://localhost:5000/api/payment/pay", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    token: token.id, // Send only token ID
+                    amount: 300, // Fixed charge
+                    userId,
+                    mechanicId
+                }),
+            });
 
-      {error && <p className="text-red-500 text-center">{error}</p>}
+            const data = await response.json();
+            console.log("Payment Response:", data); // Debugging log
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="block text-gray-700 text-sm font-semibold">
-          Card Details
-          <div className="border p-3 rounded-md mt-1">
-            <CardElement options={{ hidePostalCode: false }} className="w-full" />
-          </div>
-        </label>
+            if (data.message === "Payment successful") {
+                alert("Payment successful!");
+                onSuccessfulPayment(); // Start tracking mechanic after payment
+            } else {
+                setError("Payment failed. Try again.");
+            }
+        } catch (err) {
+            console.error("Error processing payment:", err);
+            setError("An error occurred while processing payment.");
+        }
 
-        <Button type="submit" disabled={loading}>
-          {loading ? "Processing..." : "Pay Now"}
-        </Button>
-      </form>
-    </div>
-  );
+        setProcessing(false);
+    };
+
+    return (
+        <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Enter Payment Details</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="border p-4 rounded-md mb-4">
+                    <CardElement className="p-2" />
+                </div>
+                {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+                <button
+                    type="submit"
+                    disabled={processing}
+                    className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md"
+                >
+                    {processing ? <Loader className="animate-spin h-5 w-5 mx-auto" /> : "Pay 300 PKR"}
+                </button>
+            </form>
+        </div>
+    );
 };
 
 export default CheckoutForm;
