@@ -1,6 +1,6 @@
 // src/App.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import WelcomePage from "./components/WelcomePage";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
@@ -13,30 +13,41 @@ import SmartKeyPage from "./components/SmartKeyPage";
 import UpliftingPage from "./components/UpliftingPage";
 import MobileWorkshopPage from "./components/MobileWorkshopPage";
 import PaymentPage from "./components/PaymentPage";
-//import NotFoundPage from "./components/NotFoundPage"; // ✅ Handle unknown routes
+import Footer from "./components/Footer"; // Import the Footer component
+
+const AppLayout = () => {
+  const location = useLocation();
+  const hideFooterPages = ["/payment", "/mobile-workshop", "/uplifting"];
+  const shouldShowFooter = !hideFooterPages.includes(location.pathname);
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/spare-parts" element={<SparePartsPage />} />
+          <Route path="/workshop" element={<WorkshopPage />} />
+          <Route path="/request" element={<RequestPage />} />
+          <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />
+          <Route path="/smart-key" element={<SmartKeyPage />} />
+          <Route path="/uplifting" element={<UpliftingPage />} />
+          <Route path="/mobile-workshop" element={<MobileWorkshopPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+      {shouldShowFooter && <Footer />} {/* Conditionally render Footer */}
+    </div>
+  );
+};
 
 const App = () => {
   return (
     <Router>
-      <div className="flex">
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/spare-parts" element={<SparePartsPage />} />
-            <Route path="/workshop" element={<WorkshopPage />} />
-            <Route path="/request" element={<RequestPage />} />
-            <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />
-            <Route path="/smart-key" element={<SmartKeyPage />} />
-            <Route path="/uplifting" element={<UpliftingPage />} />
-            <Route path="/mobile-workshop" element={<MobileWorkshopPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} /> {/* ✅ Redirect unknown routes */}
-          </Routes>
-        </div>
-      </div>
+      <AppLayout />
     </Router>
   );
 };
