@@ -6,7 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import sparePartsRoutes from "./routes/spareParts.js";
 import workshopRoutes from "./routes/workshopRoutes.js";
 import mechanicRoutes from "./routes/mechanicRoutes.js";
-import payment from "./routes/payment.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 import trackingRoutes from "./routes/trackingRoutes.js"; 
 
 dotenv.config();
@@ -34,7 +34,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/spareParts", sparePartsRoutes);
 app.use("/api/workshops", workshopRoutes);
 app.use("/api/mechanics", mechanicRoutes);
-app.use("/api/payment", payment);
+app.use("/api/payments", paymentRoutes);
  app.use("/api/tracking", trackingRoutes); // Uncomment this if trackingRoutes.js exists
 
 // ✅ Root Endpoint

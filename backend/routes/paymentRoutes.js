@@ -1,32 +1,30 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const stripe = require('stripe')('sk_test_your_secret_key');
-const Payment = require('../models/Payment');
+const Payment = require("../models/Payment");
 
-router.post('/pay', async (req, res) => {
-    try {
-        const { token, amount, userId, mechanicId } = req.body;
+// Save Payment Details
+router.post("/process-payment", async (req, res) => {
+  try {
+    const { cardNumber, expiryDate, cvv, productName, productPrice } = req.body;
 
-        const charge = await stripe.charges.create({
-            amount: amount * 100, // Stripe accepts amounts in cents
-            currency: 'pkr',
-            source: token,
-            description: `Payment by user ${userId} for mechanic ${mechanicId}`
-        });
-
-        const payment = new Payment({
-            userId,
-            mechanicId,
-            amount,
-            status: charge.status
-        });
-
-        await payment.save();
-        res.json({ success: true, charge, message: 'Payment successful' });
-    } catch (error) {
-        console.error('Payment Error:', error);
-        res.status(500).json({ success: false, message: 'Payment failed', error });
+    if (!cardNumber || !expiryDate || !cvv || !productName || !productPrice) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    // Save payment details to DB
+    const newPayment = new Payment({
+      cardNumber,
+      expiryDate,
+      cvv,
+      productName,
+      productPrice,
+    });
+
+    await newPayment.save();
+    res.status(200).json({ success: true, message: "Payment Successful" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 });
 
 module.exports = router;

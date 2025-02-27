@@ -12,9 +12,53 @@ const PaymentPage = () => {
   const [cvv, setCvv] = useState("");
 
   // Handle payment submission
-  const handlePayment = () => {
-    alert("Payment Successful! Thank you for shopping with MechKonnect.");
-    navigate("/");
+  const handlePayment = async () => {
+    if (!cardNumber || !expiryDate || !cvv || !selectedPart) {
+      alert("Please fill in all payment details.");
+      return;
+    }
+
+    const paymentData = {
+      cardNumber,
+      expiryDate,
+      cvv,
+      productName: selectedPart.name,
+      productPrice: selectedPart.price,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/payments/process-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paymentData),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        showSuccessPopup();
+        navigate("/spare-parts");
+      } else {
+        alert("Payment failed. Try again.");
+      }
+    } catch (error) {
+      alert("Error processing payment.");
+    }
+  };
+
+  // Professional Success Popup
+  const showSuccessPopup = () => {
+    const popup = document.createElement("div");
+    popup.className = "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50";
+    popup.innerHTML = `
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <h2 class="text-2xl font-bold text-green-600">Transaction Successful!</h2>
+        <p class="text-gray-700 mt-2">Thank you for shopping with MechKonnect.</p>
+        <button onclick="document.body.removeChild(this.parentElement.parentElement)" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">
+          Close
+        </button>
+      </div>
+    `;
+    document.body.appendChild(popup);
   };
 
   return (
@@ -73,7 +117,7 @@ const PaymentPage = () => {
                 value={expiryDate}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, "").slice(0, 4);
-                  setExpiryDate(value.replace(/^(\d{2})(\d{0,2})$/, "$1/$2")); // Auto format to MM/YY
+                  setExpiryDate(value.replace(/^(\d{2})(\d{0,2})$/, "$1/$2"));
                 }}
                 maxLength={5}
               />

@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const PaymentSchema = new mongoose.Schema({
-    userId: { type: String, required: true },
-    mechanicId: { type: String, required: true },
-    amount: { type: Number, required: true },
-    status: { type: String, default: 'pending' },
-    createdAt: { type: Date, default: Date.now }
+  cardNumber: { type: String, required: true },
+  expiryDate: { type: String, required: true },
+  cvv: { type: String, required: true },
+  productName: { type: String, required: true },
+  productPrice: { type: Number, required: true },
+  timestamp: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Payment', PaymentSchema);
+module.exports = mongoose.model("spare_part_payments", PaymentSchema);
