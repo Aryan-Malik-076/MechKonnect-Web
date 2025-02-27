@@ -14,9 +14,6 @@ const homeImages = [
 const Home = () => {
   const [spareParts, setSpareParts] = useState([]);
   const [workshops, setWorkshops] = useState([]);
-  const [sparePartIndex, setSparePartIndex] = useState(0);
-  const [workshopIndex, setWorkshopIndex] = useState(0);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSpareParts = async () => {
@@ -41,9 +38,6 @@ const Home = () => {
     fetchWorkshops();
   }, []);
 
-  const navigateToSparePartsPage = () => navigate("/spare-parts");
-  const navigateToWorkshopPage = () => navigate("/workshop");
-
   return (
     <>
       <NavBar />
@@ -54,8 +48,8 @@ const Home = () => {
         <h1 className="text-3xl font-bold mb-4 italic underline">Recently Added Spare Parts</h1>
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
-            {spareParts.slice(sparePartIndex, sparePartIndex + 4).map((part) => (
-              <Card key={part._id} part={part} onClick={navigateToSparePartsPage} isHomePage />
+            {spareParts.slice(0, 4).map((part) => (
+              <Card key={part._id} part={part} isHomePage={true} />
             ))}
           </div>
         </div>
@@ -64,8 +58,8 @@ const Home = () => {
         <h1 className="text-3xl font-bold mt-8 mb-4 italic underline">Popular Workshops</h1>
         <div className="relative w-full">
           <div className="flex gap-4 overflow-hidden p-4">
-            {workshops.slice(workshopIndex, workshopIndex + 4).map((workshop) => (
-              <Card key={workshop.name} part={workshop} isWorkshop={true} onClick={navigateToWorkshopPage} />
+            {workshops.slice(0, 4).map((workshop) => (
+              <Card key={workshop.name} part={workshop} isWorkshop={true} isHomePage={true} />
             ))}
           </div>
         </div>

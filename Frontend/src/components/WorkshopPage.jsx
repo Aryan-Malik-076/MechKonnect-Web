@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import NavBar from "./navbar";
 import Carousel from "./Carousel";
-import Card from "./Card"; // Reuse the Card component
+import Card from "./Card";
 
 const workshopImages = [
   "https://thumbs.dreamstime.com/z/car-blurry-workshop-background-351830621.jpg?ct=jpeg",
@@ -22,15 +23,15 @@ const WorkshopPage = () => {
         console.error("Error fetching workshops:", error);
       }
     };
-
+    
     fetchWorkshops();
   }, []);
 
   return (
-    <>
-      <NavBar /> {/* Navbar at the top */}
-      <Carousel images={workshopImages} /> {/* Carousel for workshop images */}
-      <div className="min-h-screen bg-black text-white p-4">
+    <div className="min-h-screen bg-black text-white">
+      <NavBar />
+      <Carousel images={workshopImages} />
+      <div className="p-4">
         <h1 className="text-3xl font-bold mb-4 italic underline">All Workshops</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {workshops.map((workshop) => (
@@ -38,7 +39,7 @@ const WorkshopPage = () => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

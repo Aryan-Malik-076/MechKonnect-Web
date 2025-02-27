@@ -17,17 +17,17 @@ const RoadsideAssistancePage = () => {
       id: 1,
       name: "Uplifting",
       description: "Get your vehicle uplifted to the nearest workshop.",
-      image: "https://via.placeholder.com/300",
-      onClick: () => navigate("/uplifting"),
+      imageUrl: "https://via.placeholder.com/300",
       serviceName: "Uplifting",
+      navigateTo: "/uplifting",
     },
     {
       id: 2,
       name: "Mobile Workshop",
       description: "Get a mobile workshop to your location.",
-      image: "https://via.placeholder.com/300",
-      onClick: () => navigate("/mobile-workshop"),
+      imageUrl: "https://via.placeholder.com/300",
       serviceName: "Mobile Workshop",
+      navigateTo: "/mobile-workshop",
     },
   ];
 
@@ -51,16 +51,12 @@ const RoadsideAssistancePage = () => {
         {/* Cards Section */}
         <div className="flex flex-wrap justify-center gap-6">
           {cardsData.map((card) => (
-            <div
+            <Card
               key={card.id}
-              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex justify-center"
-            >
-              <Card
-                part={card}
-                onClick={card.onClick}
-                serviceName={card.serviceName}
-              />
-            </div>
+              part={card}
+              isWorkshop={true} // Treat it like a service
+              onBuyNowClick={() => navigate(card.navigateTo)}
+            />
           ))}
         </div>
       </div>
