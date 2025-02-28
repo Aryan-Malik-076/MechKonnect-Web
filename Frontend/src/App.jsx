@@ -6,7 +6,7 @@ import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import SparePartsPage from "./components/SparePartsPage";
 import WorkshopPage from "./components/WorkshopPage";
-import AppointmentsPage from "./components/AppointmentsPage"; // Import AppointmentsPage
+
 import RequestPage from "./components/RequestPage"; 
 import RoadsideAssistancePage from "./components/RoadsideAssistancePage";
 import SmartKeyPage from "./components/SmartKeyPage";
@@ -37,7 +37,7 @@ const MainLayout = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/spare-parts" element={<SparePartsPage />} />
           <Route path="/workshop" element={<WorkshopPage />} />
-          <Route path="/appointments/:workshopId" element={<AppointmentsPage />} /> {/* New Route */}
+
           <Route path="/request" element={<RequestPage />} />
           <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />
           <Route path="/smart-key" element={<SmartKeyPage />} />

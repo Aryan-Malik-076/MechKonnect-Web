@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./navbar";
-import TowingService from "./TowingService";
+
 
 const UpliftingPage = () => (
   <div className="min-h-screen bg-black text-white p-6">
@@ -12,8 +12,7 @@ const UpliftingPage = () => (
       Get your vehicle uplifted to the nearest workshop.
     </p>
 
-    {/* Towing Service Component */}
-    <TowingService />
+
 
     <p className="text-center mt-8 text-lg">
       Our team will ensure your vehicle is safely transported to the nearest workshop for repairs.

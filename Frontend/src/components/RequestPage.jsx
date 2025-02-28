@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./navbar";
 import Carousel from "./Carousel";
-import Card from "./Card"; // Import the Card component
+import Card1 from "./Card1"; // Ensure you're using the updated Card1 component
 
 const requestImages = [
   "https://img.freepik.com/free-photo/car-service-worker-repairing-vehicle_1232-4207.jpg",
@@ -18,7 +18,7 @@ const RequestPage = () => {
       id: 1,
       name: "Car Service",
       description: "Schedule a car service appointment.",
-      image: "https://t3.ftcdn.net/jpg/04/96/48/30/360_F_496483060_C9OG1wJpfmjMXcNmUBibmA9wYxxZCxnW.jpg",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkz3CvVTr4w4ZIBkF7EsvcVNNocX4ghGqTKQ&s",
       onClick: () => navigate("/workshop"),
       serviceName: "Car Service",
     },
@@ -43,7 +43,7 @@ const RequestPage = () => {
       name: "Smart Key",
       description: "Get a duplicate smart key for your vehicle.",
       image: "https://img.freepik.com/free-vector/car-keys_23-2147511575.jpg",
-      onClick: () => navigate("/smart-key"),
+      onClick: () => navigate("/smart-key"), // Correct navigation for Smart Key
       serviceName: "Smart Key",
     },
   ];
@@ -57,10 +57,10 @@ const RequestPage = () => {
         <p className="mb-6">Choose a service and proceed with your request.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cardsData.map((card) => (
-            <Card
+            <Card1
               key={card.id}
-              part={card}
-              onClick={card.onClick}
+              part={card} // Pass part as an object
+              isWorkshop={false} // Ensure it's not a workshop
               serviceName={card.serviceName} // Pass the serviceName prop
             />
           ))}

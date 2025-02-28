@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Carousel from "./Carousel";
-import Card from "./Card";
+import Card1 from "./Card1"; // Import updated Card1 component
 
 const roadsideImages = [
   "https://img.freepik.com/free-photo/broken-car-street-help-service_1150-11034.jpg",
@@ -17,16 +17,14 @@ const RoadsideAssistancePage = () => {
       id: 1,
       name: "Uplifting",
       description: "Get your vehicle uplifted to the nearest workshop.",
-      imageUrl: "https://via.placeholder.com/300",
-      serviceName: "Uplifting",
+      image: "https://via.placeholder.com/300",
       navigateTo: "/uplifting",
     },
     {
       id: 2,
-      name: "Mobile Workshop",
+      name: "Mobile Mechanic",
       description: "Get a mobile workshop to your location.",
-      imageUrl: "https://via.placeholder.com/300",
-      serviceName: "Mobile Workshop",
+      image: "https://via.placeholder.com/300",
       navigateTo: "/mobile-workshop",
     },
   ];
@@ -51,11 +49,11 @@ const RoadsideAssistancePage = () => {
         {/* Cards Section */}
         <div className="flex flex-wrap justify-center gap-6">
           {cardsData.map((card) => (
-            <Card
+            <Card1
               key={card.id}
               part={card}
-              isWorkshop={true} // Treat it like a service
-              onBuyNowClick={() => navigate(card.navigateTo)}
+              isRoadside={true} // Ensures correct button names for Roadside Assistance
+              onBuyNowClick={() => navigate(card.navigateTo)} // Navigates to correct page
             />
           ))}
         </div>
