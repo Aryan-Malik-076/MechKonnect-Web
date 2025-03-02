@@ -17,14 +17,14 @@ const RoadsideAssistancePage = () => {
       id: 1,
       name: "Uplifting",
       description: "Get your vehicle uplifted to the nearest workshop.",
-      image: "https://via.placeholder.com/300",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbVOZ1oDtBZhtiutGtSe9xZ1G1cDJa1vlW1Q&s",
       navigateTo: "/uplifting",
     },
     {
       id: 2,
       name: "Mobile Mechanic",
       description: "Get a mobile workshop to your location.",
-      image: "https://via.placeholder.com/300",
+      image: "https://images.pexels.com/photos/2244746/pexels-photo-2244746.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
       navigateTo: "/mobile-workshop",
     },
   ];
