@@ -109,25 +109,7 @@ const WelcomePage = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 py-6 mt-12">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-slate-500">© {new Date().getFullYear()} MecKonnect. All rights reserved.</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="/terms" className="text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                Terms
-              </a>
-              <a href="/privacy" className="text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                Privacy
-              </a>
-              <a href="/contact" className="text-sm text-slate-500 hover:text-blue-500 transition-colors">
-                Contact
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+     
     </div>
   );
 };
