@@ -78,7 +78,7 @@ const Contact = () => {
   const partners = [
     {
       id: 1,
-      name: "John Smith",
+      name: "Raja",
       role: "Senior Mechanic",
       image: "/api/placeholder/300/300",
       contact: "+1 (555) 123-4567",
@@ -87,7 +87,7 @@ const Contact = () => {
     },
     {
       id: 2,
-      name: "Sarah Johnson",
+      name: "Uzair",
       role: "Workshop Manager",
       image: "/api/placeholder/300/300",
       contact: "+1 (555) 987-6543",
@@ -96,7 +96,7 @@ const Contact = () => {
     },
     {
       id: 3,
-      name: "Mike Thompson",
+      name: "Aryan",
       role: "Parts Specialist",
       image: "/api/placeholder/300/300",
       contact: "+1 (555) 456-7890",
