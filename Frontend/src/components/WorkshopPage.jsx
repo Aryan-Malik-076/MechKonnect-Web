@@ -6,9 +6,9 @@ import Carousel from "./Carousel";
 import Card from "./Card";
 
 const workshopImages = [
-  "https://thumbs.dreamstime.com/z/car-blurry-workshop-background-351830621.jpg?ct=jpeg",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR09GHevYvVqG9wR4sPBrNrifd0YaH-7HdUCg&s",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhk62zjEZU73joOHcYEUOylsEVHL5Oyb_a1A&s",
+  "https://png.pngtree.com/background/20250101/original/pngtree-contemporary-automobile-on-a-lift-in-a-mechanic-s-shop-3d-picture-image_11860009.jpg",
+  "https://png.pngtree.com/thumb_back/fh260/background/20240403/pngtree-auto-mechanic-working-in-garage-repair-service-image_15647939.jpg",
+  "https://png.pngtree.com/thumb_back/fw800/background/20241225/pngtree-mechanic-pouring-fresh-motor-oil-into-a-car-engine-during-routine-image_16864027.jpg",
 ];
 
 const WorkshopPage = () => {
