@@ -6,6 +6,8 @@ import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import SparePartsPage from "./components/SparePartsPage";
 import WorkshopPage from "./components/WorkshopPage";
+import AboutUs from "./components/AboutUs";
+import Contact from "./components/Contact";
 
 import RequestPage from "./components/RequestPage"; 
 import RoadsideAssistancePage from "./components/RoadsideAssistancePage";
@@ -37,6 +39,8 @@ const MainLayout = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/spare-parts" element={<SparePartsPage />} />
           <Route path="/workshop" element={<WorkshopPage />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
 
           <Route path="/request" element={<RequestPage />} />
           <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />
