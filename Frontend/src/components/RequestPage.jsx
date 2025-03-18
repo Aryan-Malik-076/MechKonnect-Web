@@ -5,7 +5,7 @@ import Carousel from "./Carousel";
 import Card1 from "./Card1";
 
 const requestImages = [
-  "https://img.freepik.com/free-photo/car-service-worker-repairing-vehicle_1232-4207.jpg",
+  "https://cdn.pixabay.com/photo/2020/03/09/13/54/engineer-4915797_640.jpg",
   "https://img.freepik.com/free-photo/auto-mechanic-working-car-mechanics-garage_1232-3446.jpg",
   "https://img.freepik.com/free-photo/auto-repair-shop-worker-fixing-car_1232-2090.jpg",
 ];

@@ -6,8 +6,8 @@ import Card1 from "./Card1";
 import { PhoneCall, Clock, MapPin } from "lucide-react";
 
 const roadsideImages = [
-  "https://img.freepik.com/free-photo/broken-car-street-help-service_1150-11034.jpg",
-  "https://img.freepik.com/free-photo/mechanic-fixing-broken-car-roadside-assistance_1150-11031.jpg",
+  "https://media.istockphoto.com/id/1319939893/photo/car-is-standing-on-the-breakdown-lane-asphalt-and-tyre-italy.jpg?s=612x612&w=0&k=20&c=8e94VWra2DQqm-Dgv9J1Eieab4ctwpwCK5qqPFFtqno=",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQl6sbJEirVm7abR16YgcP-JTGS581RJdR2FQ&s",
 ];
 
 const RoadsideAssistancePage = () => {
