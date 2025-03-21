@@ -20,6 +20,7 @@
         "@stripe/stripe-js": "^5.7.0",
         "@tabler/icons-react": "^3.29.0",
         "axios": "^1.7.9",
+        "framer-motion": "^12.5.0",
         "leaflet": "^1.9.4",
         "leaflet-fullscreen": "^1.0.2",
         "leaflet.fullscreen": "^3.0.2",

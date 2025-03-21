@@ -163,7 +163,7 @@ const Navbar = () => {
             Contact
           </Link>
           <Link
-            to="/ReturnPolicy"
+            to="/return-policy"
             className="text-gray-200 hover:bg-gray-700 hover:text-blue-400 flex items-center px-4 py-3 transition duration-300"
             onClick={toggleSidebar}
           >
@@ -171,7 +171,7 @@ const Navbar = () => {
             Return Policy
           </Link>
           <Link
-            to="/PirvacyPolicy"
+            to="/privacy-policy"
             className="text-gray-200 hover:bg-gray-700 hover:text-blue-400 flex items-center px-4 py-3 transition duration-300"
             onClick={toggleSidebar}
           >
