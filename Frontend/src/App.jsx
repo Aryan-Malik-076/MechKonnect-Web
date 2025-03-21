@@ -8,6 +8,9 @@ import SparePartsPage from "./components/SparePartsPage";
 import WorkshopPage from "./components/WorkshopPage";
 import AboutUs from "./components/AboutUs";
 import Contact from "./components/Contact";
+import AppointmentPage from "./components/AppointmentPage";
+import ReturnPolicy from "./components/ReturnPolicy";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 import RequestPage from "./components/RequestPage"; 
 import RoadsideAssistancePage from "./components/RoadsideAssistancePage";
@@ -41,6 +44,10 @@ const MainLayout = () => {
           <Route path="/workshop" element={<WorkshopPage />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/appointments" element={<AppointmentPage />} />
+          <Route path="/appointments/:workshopId" element={<AppointmentPage />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
           <Route path="/request" element={<RequestPage />} />
           <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />

@@ -46,10 +46,12 @@ const WorkshopPage = () => {
     }
   };
 
-  // Function to handle card click
+  // Modified function to handle card click - Now navigates to appointments
   const handleCardClick = (workshop) => {
-    // Navigate to the workshop detail page
-    navigate(`/workshop/${workshop._id}`, { state: { workshop } });
+    // Navigate to the appointments page with the workshop ID
+    if (workshop && workshop._id) {
+      handleBookAppointment(workshop._id);
+    }
   };
 
   return (
@@ -122,7 +124,10 @@ const WorkshopPage = () => {
             )}
             
             <div className="mt-12 text-center">
-              <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-medium transition duration-300">
+              <button 
+                className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-lg font-medium transition duration-300"
+                onClick={() => handleBookAppointment()}
+              >
                 View More Workshops
               </button>
             </div>
