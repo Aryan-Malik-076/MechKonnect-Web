@@ -240,10 +240,10 @@ const AboutUs = () => {
               transition={{ delay: 0.4 }}
               className="flex flex-col sm:flex-row justify-center gap-4"
             >
-              <a href="#" className="bg-white text-blue-800 px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300">
-                Find a Mechanic
+              <a href="roadside-assistance" className="bg-white text-blue-800 px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors duration-300">
+                Find Mechanic
               </a>
-              <a href="#" className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-blue-800 transition-all duration-300">
+              <a href="Contact" className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-blue-800 transition-all duration-300">
                 Join as a Partner
               </a>
             </motion.div>

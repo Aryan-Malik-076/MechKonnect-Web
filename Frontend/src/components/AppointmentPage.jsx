@@ -13,6 +13,7 @@ const AppointmentPage = () => {
     date: "",
     time: "",
   });
+  
 
   const [workshops, setWorkshops] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -93,7 +94,7 @@ const AppointmentPage = () => {
       
       if (response.status === 200 || response.status === 201) {
         alert("Appointment booked successfully!");
-        navigate("/");
+        navigate("/workshop");
       }
     } catch (error) {
       console.error("Error booking appointment:", error);

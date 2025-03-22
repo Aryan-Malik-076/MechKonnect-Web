@@ -70,7 +70,7 @@ const Home = () => {
   };
 
   const handleSeeAllWorkshops = () => {
-    navigate("/workshops");
+    navigate("/workshop");
   };
 
   // Custom carousel component with indicators and controls
@@ -109,7 +109,7 @@ const Home = () => {
               </p>
               <div className="flex gap-4">
                 <button
-                  onClick={() => navigate('/workshops')}
+                  onClick={() => navigate('/workshop')}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300"
                 >
                   Find Workshops

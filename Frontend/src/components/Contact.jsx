@@ -606,7 +606,7 @@ const Contact = () => {
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="font-semibold text-xl mb-3 text-gray-800">Is MechKonnect available nationwide?</h3>
                 <p className="text-gray-600">
-                  Yes, MechKonnect operates across the United States, connecting customers with certified mechanics in their area.
+                  Yes, MechKonnect operates across the Islamic Republic Of Pakistan, connecting customers with certified mechanics in their area.
                 </p>
               </div>
             </div>
