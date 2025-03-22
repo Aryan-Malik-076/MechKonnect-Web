@@ -7,7 +7,8 @@ import sparePartsRoutes from "./routes/spareParts.js";
 import workshopRoutes from "./routes/workshopRoutes.js";
 import mechanicRoutes from "./routes/mechanicRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import trackingRoutes from "./routes/trackingRoutes.js"; 
+import trackingRoutes from "./routes/trackingRoutes.js";
+import appointmentRoutes from "./routes/appointmentRoutes.js"; // Updated to use import
 
 dotenv.config();
 const app = express();
@@ -35,7 +36,8 @@ app.use("/api/spareParts", sparePartsRoutes);
 app.use("/api/workshops", workshopRoutes);
 app.use("/api/mechanics", mechanicRoutes);
 app.use("/api/payments", paymentRoutes);
- app.use("/api/tracking", trackingRoutes); // Uncomment this if trackingRoutes.js exists
+app.use("/api/tracking", trackingRoutes); // Uncomment this if trackingRoutes.js exists
+app.use("/api/appointments", appointmentRoutes);
 
 // ✅ Root Endpoint
 app.get("/", (req, res) => {
