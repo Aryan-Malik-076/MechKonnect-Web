@@ -1,6 +1,9 @@
 import React from "react";
 import Navbar from "./navbar";
 import { motion } from "framer-motion";
+import aryan from "../assets/aryan.jpeg";
+import uzair from "../assets/uzair.jpeg";
+import Raja from "../assets/Raja.jpeg";
 
 const AboutUs = () => {
   return (
@@ -55,13 +58,13 @@ const AboutUs = () => {
             <div className="bg-white p-10 rounded-xl shadow-lg">
               <div className="space-y-6 text-gray-700">
                 <p className="text-lg leading-relaxed">
-                  MechKonnect was founded in 2024 by automotive enthusiast and tech entrepreneur Aryan Haider,Uzair Safdar and Abdul Rehman following a frustrating experience that many vehicle owners can relate to — being stranded on a highway with a broken-down car and no reliable way to find immediate help.
+                  MechKonnect was founded in 2024 by automotive enthusiast and tech entrepreneur Aryan Haider, Uzair Safdar, and Abdul Rehman following a frustrating experience that many vehicle owners can relate to — being stranded on a highway with a broken-down car and no reliable way to find immediate help.
                 </p>
                 <p className="text-lg leading-relaxed">
                   After spending hours trying to find a trustworthy mechanic during that emergency breakdown, Alex realized there was a significant gap in the market: no streamlined way to connect vehicle owners with verified, skilled mechanics, especially in urgent situations.
                 </p>
                 <p className="text-lg leading-relaxed">
-                  With a background in software development and a passion for solving real-world problems, Alex assembled a team of automotive industry experts and tech innovators. Together, they developed the first version of the MechKonnect platform — a mobile app that could quickly match vehicle owners with nearby certified mechanics based on the specific issue, vehicle type, and service requirements.
+                  With a background in software development and a passion for solving real-world problems, Aryan assembled a team of automotive industry experts and tech innovators. Together, they developed the first version of the MechKonnect platform — a mobile app that could quickly match vehicle owners with nearby certified mechanics based on the specific issue, vehicle type, and service requirements.
                 </p>
                 <p className="text-lg leading-relaxed">
                   What began as a simple matching service has evolved into a comprehensive ecosystem that now includes emergency roadside assistance, scheduled maintenance services, parts procurement, and a knowledge base for DIY repairs. Our platform has helped over 50,000 vehicle owners find reliable service and has partnered with more than 3,000 certified mechanics and 500 automotive workshops nationwide.
@@ -151,11 +154,27 @@ const AboutUs = () => {
           >
             Our Leadership Team
           </motion.h2>
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Malik Aryan Haider", position: "Founder & CEO", bio: "Automotive enthusiast and tech entrepreneur with a vision to transform vehicle service." },
-              { name: "Uzair Safdar", position: "CTO", bio: "Former automotive software engineer bringing 15+ years of technical expertise to our platform." },
-              { name: "Abdul Rehman", position: "COO", bio: "Operations expert with extensive experience in scaling service businesses nationwide." },
+            
+              { 
+                name: "Uzair Safdar", 
+                position: "CTO", 
+                bio: "Former automotive software engineer bringing 15+ years of technical expertise to our platform.",
+                image: uzair // Use the imported variable
+              },
+              { 
+                name: "Malik Aryan Haider", 
+                position: "Founder & CEO", 
+                bio: "Automotive enthusiast and tech entrepreneur with a vision to transform vehicle service.",
+                image: aryan // Use the imported variable
+              },
+              { 
+                name: "Abdul Rehman", 
+                position: "COO", 
+                bio: "Operations expert with extensive experience in scaling service businesses nationwide.",
+                image: Raja // Use the imported variable
+              },
             ].map((member, index) => (
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -163,25 +182,26 @@ const AboutUs = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 key={index} 
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col items-center p-6"
               >
-                <div className="h-56 bg-blue-200 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-900 flex items-end">
-                    <div className="p-4 text-white">
-                      <h3 className="font-bold text-xl">{member.name}</h3>
-                      <p className="text-blue-100">{member.position}</p>
-                    </div>
-                  </div>
+                <div className="w-48 h-48 mb-6 rounded-full overflow-hidden border-4 border-blue-100">
+                  <img 
+                    src={member.image} 
+                    alt={`${member.name}`}
+                    className="w-full h-full object-cover object-center" 
+                  />
                 </div>
-                <div className="p-6">
+                <div className="text-center">
+                  <h3 className="font-bold text-2xl text-gray-800">{member.name}</h3>
+                  <p className="text-blue-600 font-medium mb-4">{member.position}</p>
                   <p className="text-gray-600">{member.bio}</p>
-                  <div className="mt-4 flex space-x-3">
-                    <a href="#" className="text-blue-500 hover:text-blue-700">
+                  <div className="mt-4 flex justify-center space-x-3">
+                    <a href="https://www.linkedin.com/in/your-profile" className="text-blue-500 hover:text-blue-700">
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                       </svg>
                     </a>
-                    <a href="#" className="text-blue-500 hover:text-blue-700">
+                    <a href="https://twitter.com/your-profile" className="text-blue-500 hover:text-blue-700">
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                       </svg>
@@ -229,8 +249,6 @@ const AboutUs = () => {
             </motion.div>
           </div>
         </div>
-        
-        
       </div>
     </>
   );

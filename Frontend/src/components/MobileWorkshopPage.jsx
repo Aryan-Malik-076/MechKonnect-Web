@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import MapComponent from "./MapComponent";
+import MechanicPaymentPage from "./MechanicPaymentPage";
 import { MapPin, Star, Phone, MessageCircle, ArrowRight, X, DollarSign, Clock, Compass } from "lucide-react";
 
 const MobileWorkshopPage = () => {
   const [selectedMechanic, setSelectedMechanic] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [showPaymentPage, setShowPaymentPage] = useState(false);
 
   const handleMechanicSelect = (mechanic) => {
     setSelectedMechanic(mechanic);
@@ -16,6 +18,27 @@ const MobileWorkshopPage = () => {
     // Optionally clear selection after animation
     setTimeout(() => setSelectedMechanic(null), 300);
   };
+
+  const handleBookAppointment = () => {
+    setShowDetails(false);
+    setShowPaymentPage(true);
+  };
+
+  const handleBackFromPayment = () => {
+    setShowPaymentPage(false);
+    // Optionally, decide whether to show details again or clear selection
+    setSelectedMechanic(null);
+  };
+
+  // If payment page is active, show that instead of the main page
+  if (showPaymentPage) {
+    return (
+      <MechanicPaymentPage 
+        selectedMechanic={selectedMechanic}
+        onBack={handleBackFromPayment}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -48,7 +71,7 @@ const MobileWorkshopPage = () => {
         </div>
         
         {/* Zoom Controls */}
-        <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg flex flex-col border border-gray-200">
+        <div className="absolut\e top-4 right-4 bg-white rounded-lg shadow-lg flex flex-col border border-gray-200">
           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-t-lg border-b border-gray-200">+</button>
           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-b-lg">−</button>
         </div>
@@ -133,7 +156,7 @@ const MobileWorkshopPage = () => {
                   <DollarSign className="h-4 w-4 text-blue-600 mr-2" />
                   <span className="text-gray-700">Initial Charge</span>
                 </div>
-                <span className="font-bold text-blue-700">{selectedMechanic.initialCharge || "800"} PKR</span>
+                <span className="font-bold text-blue-700">300 PKR</span>
               </div>
               <div className="text-sm text-gray-500">
                 *Additional charges may apply based on repairs needed
@@ -154,7 +177,10 @@ const MobileWorkshopPage = () => {
 
             {/* Book Appointment */}
             <div className="mt-6">
-              <button className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-medium flex items-center justify-center transition-colors">
+              <button 
+                onClick={handleBookAppointment}
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-medium flex items-center justify-center transition-colors"
+              >
                 Book Appointment
                 <ArrowRight className="h-4 w-4 ml-2" />
               </button>

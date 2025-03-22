@@ -11,6 +11,7 @@ import Contact from "./components/Contact";
 import AppointmentPage from "./components/AppointmentPage";
 import ReturnPolicy from "./components/ReturnPolicy";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import MechanicPaymentPage from "./components/MechanicPaymentPage";
 
 import RequestPage from "./components/RequestPage"; 
 import RoadsideAssistancePage from "./components/RoadsideAssistancePage";
@@ -48,6 +49,7 @@ const MainLayout = () => {
           <Route path="/appointments/:workshopId" element={<AppointmentPage />} />
           <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/mechanic-payment" element={<MechanicPaymentPage />} />
 
           <Route path="/request" element={<RequestPage />} />
           <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />

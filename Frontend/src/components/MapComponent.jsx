@@ -55,7 +55,7 @@ const MapComponent = () => {
   // Confirm Mechanic Selection & Redirect to Payment
   const handleConfirm = (mechanic) => {
     localStorage.setItem("selectedMechanic", JSON.stringify(mechanic)); // Store mechanic details
-    window.location.href = "/payment"; // Redirect to payment page
+    window.location.href = "/mechanic-payment"; // Redirect to payment page
   };
 
   return (
