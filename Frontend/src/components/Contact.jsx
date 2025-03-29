@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Phone, Mail, MapPin, Upload, X, Calendar, User, Clock, Star, Shield, Send, Wrench } from "lucide-react";
+import { Phone, Mail, MapPin, Calendar, User, Clock, Star, Shield, Send, Wrench } from "lucide-react";
 import Navbar from "./navbar";
 
 import aryan from "../assets/aryan.jpeg";
@@ -14,16 +14,6 @@ const Contact = () => {
     message: "",
   });
 
-  const [imagePreview, setImagePreview] = useState(null);
-  const [partnerData, setPartnerData] = useState({
-    partnerName: "",
-    partnerRole: "",
-    partnerBio: "",
-    partnerEmail: "",
-    partnerPhone: "",
-    partnerLocation: "",
-  });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -32,58 +22,45 @@ const Contact = () => {
     });
   };
 
-  const handlePartnerChange = (e) => {
-    const { name, value } = e.target;
-    setPartnerData({
-      ...partnerData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Message sent! We'll get back to you soon.");
-    setFormData({ name: "", email: "", phone: "", message: "" });
-  };
-
-  const handlePartnerSubmit = (e) => {
-    e.preventDefault();
-    console.log("Partner form submitted:", partnerData);
-    alert("Partner information submitted successfully!");
-    setPartnerData({ 
-      partnerName: "", 
-      partnerRole: "", 
-      partnerBio: "", 
-      partnerEmail: "", 
-      partnerPhone: "", 
-      partnerLocation: "" 
-    });
-    setImagePreview(null);
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(text || 'Server returned non-JSON response');
+      }
+  
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.errors ? data.errors[0].msg : 'Failed to send message');
+      }
+  
+      alert(data.msg || "Message sent! We'll get back to you soon.");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      console.error('Error:', error);
+      alert(error.message || 'Failed to send message. Please try again.');
     }
   };
-
-  const removeImage = () => {
-    setImagePreview(null);
-  };
-
   // Sample partners data with imported images
   const partners = [
     {
       id: 1,
       name: "Raja",
       role: "Senior Mechanic",
-      image: Raja, // Use imported image
+      image: Raja,
       contact: "+1 (555) 123-4567",
       location: "Islamabad, ISB",
       specialty: "Engine Diagnostics",
@@ -94,7 +71,7 @@ const Contact = () => {
       id: 2,
       name: "Uzair",
       role: "Workshop Manager",
-      image: uzair, // Use imported image
+      image: uzair,
       contact: "+1 (555) 987-6543",
       location: "Attcok, AT",
       specialty: "European Imports",
@@ -105,7 +82,7 @@ const Contact = () => {
       id: 3,
       name: "Aryan",
       role: "Parts Specialist",
-      image: aryan, // Use imported image
+      image: aryan,
       contact: "+1 (555) 456-7890",
       location: "Kamra, KC",
       specialty: "Vintage Restorations",
@@ -127,14 +104,14 @@ const Contact = () => {
           <div className="container mx-auto px-4 text-center relative z-10">
             <h1 className="text-5xl font-bold mb-6">Get In Touch</h1>
             <p className="text-xl max-w-2xl mx-auto opacity-90 mb-8">
-              Connect with the MechKonnect team or join our network of trusted automotive professionals
+              Connect with the MechKonnect team or our network of trusted automotive professionals
             </p>
             <div className="flex justify-center space-x-4">
               <a href="#contact-form" className="bg-white text-blue-800 hover:bg-blue-100 px-6 py-3 rounded-lg font-medium transition duration-300">
                 Send Message
               </a>
               <a href="#partner-section" className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-800 px-6 py-3 rounded-lg font-medium transition duration-300">
-                Become a Partner
+                View Partners
               </a>
             </div>
           </div>
@@ -147,7 +124,7 @@ const Contact = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4 text-gray-800">How Can We Help You?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Our dedicated team is ready to assist you with any questions about our services, partnerships, or technical support.
+              Our dedicated team is ready to assist you with any questions about our services or technical support.
             </p>
           </div>
           
@@ -412,191 +389,12 @@ const Contact = () => {
               </button>
             </div>
           </div>
-
-          {/* Become a Partner Section */}
-          <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-xl shadow-lg p-12 mb-20 relative overflow-hidden">
-            {/* Background decorative elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mt-20 -mr-20"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -mb-16 -ml-16"></div>
-            
-            <div className="relative z-10">
-              <h2 className="text-3xl font-bold mb-3 text-white">Join Our Partner Network</h2>
-              <p className="text-blue-100 mb-8 max-w-2xl">
-                Want to be featured as a MechKonnect partner? Fill out the form below to join our growing network of automotive professionals and start connecting with customers in your area.
-              </p>
-
-              <div className="bg-white p-8 rounded-xl shadow-md">
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">Partner Application</h3>
-                  <p className="text-gray-600">Complete the information below to apply for our partner program. Our team will review your application and contact you within 3-5 business days.</p>
-                </div>
-                
-                <form onSubmit={handlePartnerSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="partnerName" className="block text-gray-700 font-medium mb-2">Full Name</label>
-                      <input
-                        type="text"
-                        id="partnerName"
-                        name="partnerName"
-                        value={partnerData.partnerName}
-                        onChange={handlePartnerChange}
-                        placeholder="John Smith"
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required />
-                    </div>
-                    <div>
-                      <label htmlFor="partnerRole" className="block text-gray-700 font-medium mb-2">Role/Specialty</label>
-                      <input
-                        type="text"
-                        id="partnerRole"
-                        name="partnerRole"
-                        value={partnerData.partnerRole}
-                        onChange={handlePartnerChange}
-                        placeholder="Master Mechanic, Engine Specialist, etc."
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required />
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="partnerEmail" className="block text-gray-700 font-medium mb-2">Email Address</label>
-                      <input
-                        type="email"
-                        id="partnerEmail"
-                        name="partnerEmail"
-                        value={partnerData.partnerEmail}
-                        onChange={handlePartnerChange}
-                        placeholder="your.email@example.com"
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required />
-                    </div>
-                    <div>
-                      <label htmlFor="partnerPhone" className="block text-gray-700 font-medium mb-2">Phone Number</label>
-                      <input
-                        type="tel"
-                        id="partnerPhone"
-                        name="partnerPhone"
-                        value={partnerData.partnerPhone}
-                        onChange={handlePartnerChange}
-                        placeholder="+1 (555) 123-4567"
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="partnerLocation" className="block text-gray-700 font-medium mb-2">Location</label>
-                    <input
-                      type="text"
-                      id="partnerLocation"
-                      name="partnerLocation"
-                      value={partnerData.partnerLocation}
-                      onChange={handlePartnerChange}
-                      placeholder="City, State"
-                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      required />
-                  </div>
-
-                  <div>
-                    <label htmlFor="partnerBio" className="block text-gray-700 font-medium mb-2">Bio/Description</label>
-                    <textarea
-                      id="partnerBio"
-                      name="partnerBio"
-                      value={partnerData.partnerBio}
-                      onChange={handlePartnerChange}
-                      placeholder="Tell us about your experience and specialties..."
-                      rows="4"
-                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                      required
-                    ></textarea>
-                  </div>
-
-                  <div>
-                    <label htmlFor="imageUpload" className="block text-gray-700 font-medium mb-2">Profile Picture</label>
-                    <div className="flex items-center justify-center w-full">
-                      <label
-                        htmlFor="imageUpload"
-                        className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-                      >
-                        {imagePreview ? (
-                          <div className="relative w-full h-full flex items-center justify-center">
-                            <img
-                              src={imagePreview}
-                              alt="Preview"
-                              className="max-h-full max-w-full object-contain rounded-lg" />
-                            <button
-                              type="button"
-                              onClick={removeImage}
-                              className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
-                            >
-                              <X className="h-5 w-5 text-gray-600" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <Upload className="h-10 w-10 text-gray-400 mb-2" />
-                            <p className="text-sm text-gray-500 font-medium">
-                              <span className="text-blue-600">Click to upload</span> or drag and drop
-                            </p>
-                            <p className="text-xs text-gray-500 mt-1">
-                              SVG, PNG, JPG or GIF (MAX. 800x400px)
-                            </p>
-                          </div>
-                        )}
-                      </label>
-                      <input
-                        id="imageUpload"
-                        type="file"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                        accept="image/*" />
-                    </div>
-                  </div>
-
-                  <div className="flex items-start mb-4">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="terms"
-                        type="checkbox"
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-                        required
-                      />
-                    </div>
-                    <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                      I agree to the <a href="#" className="text-blue-600 hover:underline">Terms and Conditions</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition duration-300 transform hover:-translate-y-1 hover:shadow-xl w-full flex items-center justify-center"
-                  >
-                    Submit Partner Application
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
           
           {/* FAQ Section */}
           <div className="bg-white rounded-xl shadow-lg p-10 mb-20">
             <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Frequently Asked Questions</h2>
             
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-xl mb-3 text-gray-800">How do I join the MechKonnect network?</h3>
-                <p className="text-gray-600">
-                  Fill out the partner application form on this page with your information. Our team will review your application and contact you within 3-5 business days.
-                </p>
-              </div>
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-xl mb-3 text-gray-800">What are the benefits of becoming a partner?</h3>
-                <p className="text-gray-600">
-                  As a MechKonnect partner, you gain access to a wide network of customers, marketing support, and tools to manage your business efficiently.
-                </p>
-              </div>
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="font-semibold text-xl mb-3 text-gray-800">How do I contact customer support?</h3>
                 <p className="text-gray-600">
@@ -607,6 +405,18 @@ const Contact = () => {
                 <h3 className="font-semibold text-xl mb-3 text-gray-800">Is MechKonnect available nationwide?</h3>
                 <p className="text-gray-600">
                   Yes, MechKonnect operates across the Islamic Republic Of Pakistan, connecting customers with certified mechanics in their area.
+                </p>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-xl mb-3 text-gray-800">What services do you offer?</h3>
+                <p className="text-gray-600">
+                  We connect customers with certified mechanics for all types of automotive repairs, maintenance, and diagnostics.
+                </p>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-xl mb-3 text-gray-800">How do I schedule an appointment?</h3>
+                <p className="text-gray-600">
+                  You can schedule an appointment directly with one of our partner mechanics through their profile or by contacting our support team.
                 </p>
               </div>
             </div>

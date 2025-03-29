@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, LogIn, User } from "lucide-react";
+import { Mail, Lock, LogIn } from "lucide-react";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -15,6 +15,23 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
+    // Hardcoded admin credentials (for testing only)
+    const ADMIN_CREDENTIALS = {
+      email: "admin1@gmail.com",
+      password: "123",
+      isAdmin: true
+    };
+
+    // Check if credentials match hardcoded admin
+    if (form.email === ADMIN_CREDENTIALS.email && form.password === ADMIN_CREDENTIALS.password) {
+      localStorage.setItem("token", "admin-token");
+      localStorage.setItem("userId", "admin-user-id");
+      localStorage.setItem("isAdmin", "true");
+      setIsLoading(false);
+      navigate("/admin-dashboard");
+      return;
+    }
+
     try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -26,7 +43,16 @@ const Login = () => {
       
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/Home");
+        localStorage.setItem("userId", data.userId);
+        
+        // Check if user is admin and redirect accordingly
+        if (data.isAdmin) {
+          localStorage.setItem("isAdmin", "true");
+          navigate("/admin-dashboard");
+        } else {
+          localStorage.removeItem("isAdmin");
+          navigate("/Home");
+        }
       } else {
         alert(data.msg);
       }
@@ -151,19 +177,6 @@ const Login = () => {
             <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium hover:underline">
               Create an account
             </Link>
-          </div>
-          
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-blue-900/30"></div>
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-slate-950/80 text-blue-200/70">Or continue with</span>
-              </div>
-            </div>
-            
-            
           </div>
         </div>
       </div>

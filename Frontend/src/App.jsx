@@ -12,14 +12,40 @@ import AppointmentPage from "./components/AppointmentPage";
 import ReturnPolicy from "./components/ReturnPolicy";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import MechanicPaymentPage from "./components/MechanicPaymentPage";
-
-import RequestPage from "./components/RequestPage"; 
+import RequestPage from "./components/RequestPage";
 import RoadsideAssistancePage from "./components/RoadsideAssistancePage";
 import SmartKeyPage from "./components/SmartKeyPage";
 import UpliftingPage from "./components/UpliftingPage";
 import MobileWorkshopPage from "./components/MobileWorkshopPage";
 import PaymentPage from "./components/PaymentPage";
+import AdminDashboard from "./components/AdminDashboard";
 import Footer from "./components/Footer";
+
+// Route Protection Components
+const PrivateRoute = ({ children }) => {
+  const isAuthenticated = !!localStorage.getItem('token');
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  return children;
+};
+
+const AdminRoute = ({ children }) => {
+  const isAuthenticated = !!localStorage.getItem('token');
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/home" />;
+  }
+
+  return children;
+};
 
 const App = () => {
   return (
@@ -31,8 +57,8 @@ const App = () => {
 
 const MainLayout = () => {
   const location = useLocation();
-  const hideFooterPaths = ["/payment", "/mobile-workshop", "/uplifting"];
-
+  const hideFooterPaths = ["/payment", "/mobile-workshop", "/uplifting", "/admin-dashboard"];
+  
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex-1">
@@ -40,7 +66,14 @@ const MainLayout = () => {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/home" element={<Home />} />
+          <Route 
+            path="/home" 
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            } 
+          />
           <Route path="/spare-parts" element={<SparePartsPage />} />
           <Route path="/workshop" element={<WorkshopPage />} />
           <Route path="/about" element={<AboutUs />} />
@@ -50,17 +83,27 @@ const MainLayout = () => {
           <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/mechanic-payment" element={<MechanicPaymentPage />} />
-
           <Route path="/request" element={<RequestPage />} />
           <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />
           <Route path="/smart-key" element={<SmartKeyPage />} />
           <Route path="/uplifting" element={<UpliftingPage />} />
           <Route path="/mobile-workshop" element={<MobileWorkshopPage />} />
           <Route path="/payment" element={<PaymentPage />} />
+          
+          {/* Admin Dashboard Route */}
+          <Route 
+            path="/admin-dashboard/*" 
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } 
+          />
+          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
-
+      
       {/* Conditionally render Footer */}
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </div>
