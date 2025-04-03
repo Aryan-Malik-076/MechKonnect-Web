@@ -9,12 +9,16 @@ import {
   User,
   Shield,
   Menu,
-  X
+  X,
+  Wrench,
+  ShoppingCart,
+  DollarSign
 } from "lucide-react";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
+  const [spareParts, setSpareParts] = useState([]);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -58,6 +62,22 @@ const AdminDashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching users:", error);
+      }
+    };
+
+    const fetchSpareParts = async () => {
+      try {
+        // Using the same endpoint as in your spare parts route
+        const res = await fetch("http://localhost:5000/api/spareParts");
+        
+        if (res.ok) {
+          const data = await res.json();
+          setSpareParts(data);
+        } else {
+          throw new Error("Failed to fetch spare parts");
+        }
+      } catch (error) {
+        console.error("Error fetching spare parts:", error);
       } finally {
         setLoading(false);
       }
@@ -65,6 +85,7 @@ const AdminDashboard = () => {
 
     fetchDashboardData();
     fetchUsers();
+    fetchSpareParts();
   }, []);
 
   const handleLogout = () => {
@@ -76,6 +97,23 @@ const AdminDashboard = () => {
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  // Calculate total value of spare parts inventory
+  const calculateTotalInventoryValue = () => {
+    return spareParts.reduce((total, part) => {
+      const discountedPrice = part.discount 
+        ? part.price - (part.price * (part.discount / 100)) 
+        : part.price;
+      return total + discountedPrice;
+    }, 0).toFixed(2);
+  };
+
+  // Get average price of spare parts
+  const getAveragePrice = () => {
+    if (spareParts.length === 0) return 0;
+    const total = spareParts.reduce((sum, part) => sum + part.price, 0);
+    return (total / spareParts.length).toFixed(2);
   };
 
   // Render different tabs
@@ -92,7 +130,20 @@ const AdminDashboard = () => {
                 bgColor="bg-blue-500/10"
                 borderColor="border-blue-500/20"
               />
-              {/* Add more stat cards as needed */}
+              <StatCard
+                title="Spare Parts"
+                value={spareParts.length}
+                icon={<Wrench className="h-8 w-8 text-green-500" />}
+                bgColor="bg-green-500/10"
+                borderColor="border-green-500/20"
+              />
+              <StatCard
+                title="Inventory Value"
+                value={`$${calculateTotalInventoryValue()}`}
+                icon={<DollarSign className="h-8 w-8 text-yellow-500" />}
+                bgColor="bg-yellow-500/10"
+                borderColor="border-yellow-500/20"
+              />
             </div>
             
             <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
@@ -170,6 +221,87 @@ const AdminDashboard = () => {
             </div>
           </div>
         );
+      case "analytics":
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StatCard
+                title="Total Parts"
+                value={spareParts.length}
+                icon={<Wrench className="h-8 w-8 text-green-500" />}
+                bgColor="bg-green-500/10"
+                borderColor="border-green-500/20"
+              />
+              <StatCard
+                title="Average Price"
+                value={`$${getAveragePrice()}`}
+                icon={<DollarSign className="h-8 w-8 text-yellow-500" />}
+                bgColor="bg-yellow-500/10"
+                borderColor="border-yellow-500/20"
+              />
+              <StatCard
+                title="Total Value"
+                value={`$${calculateTotalInventoryValue()}`}
+                icon={<ShoppingCart className="h-8 w-8 text-purple-500" />}
+                bgColor="bg-purple-500/10"
+                borderColor="border-purple-500/20"
+              />
+            </div>
+            
+            <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
+              <h3 className="text-lg font-semibold text-white mb-4">Spare Parts Inventory</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-slate-700/50">
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Name</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Description</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Price</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Discount</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Final Price</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {spareParts.map((part, index) => {
+                      const finalPrice = part.discount 
+                        ? part.price - (part.price * (part.discount / 100)) 
+                        : part.price;
+
+                      return (
+                        <tr key={part._id || index} className="border-b border-slate-700/50">
+                          <td className="py-3 px-4 text-white">{part.name}</td>
+                          <td className="py-3 px-4 text-white">
+                            {part.description && part.description.length > 50 
+                              ? `${part.description.substring(0, 50)}...` 
+                              : part.description || "-"}
+                          </td>
+                          <td className="py-3 px-4 text-white">${part.price ? part.price.toFixed(2) : "0.00"}</td>
+                          <td className="py-3 px-4 text-white">
+                            {part.discount ? `${part.discount}%` : "-"}
+                          </td>
+                          <td className="py-3 px-4 text-white">${finalPrice ? finalPrice.toFixed(2) : "0.00"}</td>
+                          <td className="py-3 px-4">
+                            <div className="flex space-x-3">
+                              <button className="text-blue-400 hover:text-blue-300">
+                                Edit
+                              </button>
+                              <button className="text-red-400 hover:text-red-300">
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+      case "settings":
+        return <div>Settings Coming Soon</div>;
       default:
         return <div>Coming Soon</div>;
     }
@@ -252,11 +384,13 @@ const AdminDashboard = () => {
           <h1 className="text-2xl font-bold">
             {activeTab === "dashboard" && "Dashboard"}
             {activeTab === "users" && "User Management"}
-            {activeTab === "analytics" && "Analytics"}
+            {activeTab === "analytics" && "Spare Parts Analytics"}
             {activeTab === "settings" && "Settings"}
           </h1>
           <p className="text-slate-400 mt-1">
-            Welcome to the admin panel
+            {activeTab === "analytics" 
+              ? "Manage and analyze your spare parts inventory"
+              : "Welcome to the admin panel"}
           </p>
         </header>
 
