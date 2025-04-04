@@ -16,7 +16,8 @@ import {
   Calendar,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  CreditCard, // Added for Payments tab
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -24,6 +25,7 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [spareParts, setSpareParts] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [payments, setPayments] = useState([]); // New state for payments
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -80,18 +82,12 @@ const AdminDashboard = () => {
 
     const fetchAppointments = async () => {
       try {
-        // Since your POST route doesn't require auth, we'll assume GET doesn't either
-        // If it does require auth, uncomment the token and headers
-        // const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/appointments" /*, {
-          headers: { "x-auth-token": token },
-        }*/);
+        const res = await fetch("http://localhost:5000/api/appointments");
         if (res.ok) {
           const data = await res.json();
-          // Add a default status if not present in the schema
-          const appointmentsWithStatus = data.map(appointment => ({
+          const appointmentsWithStatus = data.map((appointment) => ({
             ...appointment,
-            status: appointment.status || "pending", // Default to "pending" if status isn't in DB
+            status: appointment.status || "pending",
           }));
           setAppointments(appointmentsWithStatus);
         } else {
@@ -99,6 +95,20 @@ const AdminDashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching appointments:", error);
+      }
+    };
+
+    const fetchPayments = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/payments");
+        if (res.ok) {
+          const data = await res.json();
+          setPayments(data);
+        } else {
+          throw new Error("Failed to fetch payments");
+        }
+      } catch (error) {
+        console.error("Error fetching payments:", error);
       } finally {
         setLoading(false);
       }
@@ -108,6 +118,7 @@ const AdminDashboard = () => {
     fetchUsers();
     fetchSpareParts();
     fetchAppointments();
+    fetchPayments(); // Fetch payments on load
   }, []);
 
   const handleLogout = () => {
@@ -196,6 +207,18 @@ const AdminDashboard = () => {
     });
   };
 
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return "N/A";
+    const date = new Date(timestamp);
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  };
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "confirmed":
@@ -259,9 +282,9 @@ const AdminDashboard = () => {
                 borderColor="border-purple-500/20"
               />
               <StatCard
-                title="Inventory Value"
-                value={`$${calculateTotalInventoryValue()}`}
-                icon={<DollarSign className="h-8 w-8 text-yellow-500" />}
+                title="Total Payments"
+                value={payments.length}
+                icon={<CreditCard className="h-8 w-8 text-yellow-500" />}
                 bgColor="bg-yellow-500/10"
                 borderColor="border-yellow-500/20"
               />
@@ -301,26 +324,22 @@ const AdminDashboard = () => {
                 </div>
               </div>
               <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
-                <h3 className="text-lg font-semibold text-white mb-4">Upcoming Appointments</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">Recent Payments</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-700/50">
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Name</th>
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Workshop</th>
+                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Product</th>
+                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Price</th>
                         <th className="text-left py-3 px-4 text-slate-400 font-medium">Date</th>
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Time</th>
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {appointments.slice(0, 5).map((appointment) => (
-                        <tr key={appointment._id} className="border-b border-slate-700/50">
-                          <td className="py-3 px-4 text-white">{appointment.name}</td>
-                          <td className="py-3 px-4 text-white">{appointment.workshop}</td>
-                          <td className="py-3 px-4 text-white">{formatDate(appointment.date)}</td>
-                          <td className="py-3 px-4 text-white">{formatTime(appointment.time)}</td>
-                          <td className="py-3 px-4">{getStatusBadge(appointment.status)}</td>
+                      {payments.slice(0, 5).map((payment) => (
+                        <tr key={payment._id} className="border-b border-slate-700/50">
+                          <td className="py-3 px-4 text-white">{payment.productName}</td>
+                          <td className="py-3 px-4 text-white">${payment.productPrice.toFixed(2)}</td>
+                          <td className="py-3 px-4 text-white">{formatTimestamp(payment.timestamp)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -524,6 +543,44 @@ const AdminDashboard = () => {
             </div>
           </div>
         );
+      case "payments": // New Payments tab
+        return (
+          <div className="space-y-6">
+            <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-white">All Payments</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-slate-700/50">
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Product Name</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Price</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Card Number</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Expiry Date</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">CVV</th>
+                      <th className="text-left py-3 px-4 text-slate-400 font-medium">Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.map((payment) => (
+                      <tr key={payment._id} className="border-b border-slate-700/50">
+                        <td className="py-3 px-4 text-white">{payment.productName}</td>
+                        <td className="py-3 px-4 text-white">${payment.productPrice.toFixed(2)}</td>
+                        <td className="py-3 px-4 text-white">
+                          {`**** **** **** ${payment.cardNumber.slice(-4)}`}
+                        </td>
+                        <td className="py-3 px-4 text-white">{payment.expiryDate}</td>
+                        <td className="py-3 px-4 text-white">***</td>
+                        <td className="py-3 px-4 text-white">{formatTimestamp(payment.timestamp)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
       case "settings":
         return <div>Settings Coming Soon</div>;
       default:
@@ -586,6 +643,12 @@ const AdminDashboard = () => {
             onClick={() => setActiveTab("analytics")}
           />
           <SidebarItem
+            icon={<CreditCard />}
+            text="Payments"
+            active={activeTab === "payments"}
+            onClick={() => setActiveTab("payments")}
+          />
+          <SidebarItem
             icon={<Settings />}
             text="Settings"
             active={activeTab === "settings"}
@@ -609,6 +672,7 @@ const AdminDashboard = () => {
             {activeTab === "users" && "User Management"}
             {activeTab === "appointments" && "Appointment Management"}
             {activeTab === "analytics" && "Spare Parts Analytics"}
+            {activeTab === "payments" && "Payment Management"}
             {activeTab === "settings" && "Settings"}
           </h1>
           <p className="text-slate-400 mt-1">
@@ -616,6 +680,8 @@ const AdminDashboard = () => {
               ? "Manage and track all service appointments"
               : activeTab === "analytics"
               ? "Manage and analyze your spare parts inventory"
+              : activeTab === "payments"
+              ? "View and manage all payment transactions"
               : "Welcome to the admin panel"}
           </p>
         </header>
