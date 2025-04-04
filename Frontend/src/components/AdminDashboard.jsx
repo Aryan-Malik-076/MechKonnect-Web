@@ -17,15 +17,20 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  CreditCard, // Added for Payments tab
+  CreditCard,
 } from "lucide-react";
+import { Pie, Bar, Line } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement } from "chart.js";
+
+// Register ChartJS components
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement);
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [spareParts, setSpareParts] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [payments, setPayments] = useState([]); // New state for payments
+  const [payments, setPayments] = useState([]);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -57,7 +62,13 @@ const AdminDashboard = () => {
         });
         if (res.ok) {
           const data = await res.json();
-          setUsers(data);
+          // Static users added
+          const staticUsers = [
+            { _id: "1", name: "Aryan", email: "aryan@example.com", title: "Senior Mechanic", role: "Admin", isAdmin: true },
+            { _id: "2", name: "Uzair", email: "uzair@example.com", title: "Sales Manager", role: "User", isAdmin: false },
+            { _id: "3", name: "Raja", email: "raja@example.com", title: "Inventory Specialist", role: "User", isAdmin: false },
+          ];
+          setUsers([...data, ...staticUsers]);
         } else {
           throw new Error("Failed to fetch users");
         }
@@ -118,7 +129,7 @@ const AdminDashboard = () => {
     fetchUsers();
     fetchSpareParts();
     fetchAppointments();
-    fetchPayments(); // Fetch payments on load
+    fetchPayments();
   }, []);
 
   const handleLogout = () => {
@@ -254,40 +265,65 @@ const AdminDashboard = () => {
     }
   };
 
+  // Chart Data
+  const today = new Date().toISOString().split("T")[0];
+  const todayAppointments = appointments.filter((appt) => formatDate(appt.date) === formatDate(today)).length;
+  const todayPayments = payments.filter((pay) => formatDate(pay.timestamp) === formatDate(today)).length;
+
+  const pieData = {
+    labels: ["Appointments Booked Today", "Spare Parts Sold Today"],
+    datasets: [
+      {
+        data: [todayAppointments, todayPayments],
+        backgroundColor: ["#34D399", "#FBBF24"],
+        hoverBackgroundColor: ["#2DD4BF", "#FCD34D"],
+      },
+    ],
+  };
+
+  const barData = {
+    labels: ["Users", "Spare Parts", "Appointments", "Payments"],
+    datasets: [
+      {
+        label: "Total Count",
+        data: [users.length, spareParts.length, appointments.length, payments.length],
+        backgroundColor: "rgba(59, 130, 246, 0.5)",
+        borderColor: "rgba(59, 130, 246, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const lineData = {
+    labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5"], // Example days
+    datasets: [
+      {
+        label: "Appointments",
+        data: [5, 10, 8, 15, todayAppointments], // Example data + today's
+        fill: false,
+        borderColor: "#34D399",
+        tension: 0.1,
+      },
+      {
+        label: "Payments",
+        data: [3, 7, 5, 12, todayPayments], // Example data + today's
+        fill: false,
+        borderColor: "#FBBF24",
+        tension: 0.1,
+      },
+    ],
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <StatCard
-                title="Total Users"
-                value={stats?.userCount || 0}
-                icon={<Users className="h-8 w-8 text-blue-500" />}
-                bgColor="bg-blue-500/10"
-                borderColor="border-blue-500/20"
-              />
-              <StatCard
-                title="Spare Parts"
-                value={spareParts.length}
-                icon={<Wrench className="h-8 w-8 text-green-500" />}
-                bgColor="bg-green-500/10"
-                borderColor="border-green-500/20"
-              />
-              <StatCard
-                title="Appointments"
-                value={appointments.length}
-                icon={<Calendar className="h-8 w-8 text-purple-500" />}
-                bgColor="bg-purple-500/10"
-                borderColor="border-purple-500/20"
-              />
-              <StatCard
-                title="Total Payments"
-                value={payments.length}
-                icon={<CreditCard className="h-8 w-8 text-yellow-500" />}
-                bgColor="bg-yellow-500/10"
-                borderColor="border-yellow-500/20"
-              />
+              <StatCard title="Total Users" value={users.length} icon={<Users className="h-8 w-8 text-blue-500" />} bgColor="bg-blue-500/10" borderColor="border-blue-500/20" />
+              <StatCard title="Spare Parts" value={spareParts.length} icon={<Wrench className="h-8 w-8 text-green-500" />} bgColor="bg-green-500/10" borderColor="border-green-500/20" />
+              <StatCard title="Appointments" value={appointments.length} icon={<Calendar className="h-8 w-8 text-purple-500" />} bgColor="bg-purple-500/10" borderColor="border-purple-500/20" />
+              <StatCard title="Total Payments" value={payments.length} icon={<CreditCard className="h-8 w-8 text-yellow-500" />} bgColor="bg-yellow-500/10" borderColor="border-yellow-500/20" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
@@ -297,7 +333,7 @@ const AdminDashboard = () => {
                     <thead>
                       <tr className="border-b border-slate-700/50">
                         <th className="text-left py-3 px-4 text-slate-400 font-medium">Name</th>
-                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Email</th>
+                        <th className="text-left py-3 px-4 text-slate-400 font-medium">Title</th>
                         <th className="text-left py-3 px-4 text-slate-400 font-medium">Role</th>
                       </tr>
                     </thead>
@@ -305,16 +341,10 @@ const AdminDashboard = () => {
                       {users.slice(0, 5).map((user) => (
                         <tr key={user._id} className="border-b border-slate-700/50">
                           <td className="py-3 px-4 text-white">{user.name}</td>
-                          <td className="py-3 px-4 text-white">{user.email}</td>
+                          <td className="py-3 px-4 text-white">{user.title}</td>
                           <td className="py-3 px-4">
-                            <span
-                              className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                                user.isAdmin
-                                  ? "bg-purple-500/20 text-purple-300"
-                                  : "bg-blue-500/20 text-blue-300"
-                              }`}
-                            >
-                              {user.isAdmin ? "Admin" : "User"}
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${user.isAdmin ? "bg-purple-500/20 text-purple-300" : "bg-blue-500/20 text-blue-300"}`}>
+                              {user.role}
                             </span>
                           </td>
                         </tr>
@@ -354,9 +384,7 @@ const AdminDashboard = () => {
           <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-white">All Users</h3>
-              <button className="px-4 py-2 bg-blue-600 rounded-lg text-white hover:bg-blue-700 transition">
-                Add User
-              </button>
+              <button className="px-4 py-2 bg-blue-600 rounded-lg text-white hover:bg-blue-700 transition">Add User</button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -364,6 +392,7 @@ const AdminDashboard = () => {
                   <tr className="border-b border-slate-700/50">
                     <th className="text-left py-3 px-4 text-slate-400 font-medium">Name</th>
                     <th className="text-left py-3 px-4 text-slate-400 font-medium">Email</th>
+                    <th className="text-left py-3 px-4 text-slate-400 font-medium">Title</th>
                     <th className="text-left py-3 px-4 text-slate-400 font-medium">Role</th>
                     <th className="text-left py-3 px-4 text-slate-400 font-medium">Actions</th>
                   </tr>
@@ -373,15 +402,10 @@ const AdminDashboard = () => {
                     <tr key={user._id} className="border-b border-slate-700/50">
                       <td className="py-3 px-4 text-white">{user.name}</td>
                       <td className="py-3 px-4 text-white">{user.email}</td>
+                      <td className="py-3 px-4 text-white">{user.title}</td>
                       <td className="py-3 px-4">
-                        <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                            user.isAdmin
-                              ? "bg-purple-500/20 text-purple-300"
-                              : "bg-blue-500/20 text-blue-300"
-                          }`}
-                        >
-                          {user.isAdmin ? "Admin" : "User"}
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${user.isAdmin ? "bg-purple-500/20 text-purple-300" : "bg-blue-500/20 text-blue-300"}`}>
+                          {user.role}
                         </span>
                       </td>
                       <td className="py-3 px-4">
@@ -431,29 +455,16 @@ const AdminDashboard = () => {
                         <td className="py-3 px-4">
                           <div className="flex space-x-3">
                             {appointment.status !== "confirmed" && (
-                              <button
-                                className="text-green-400 hover:text-green-300 flex items-center"
-                                onClick={() =>
-                                  handleUpdateAppointmentStatus(appointment._id, "confirmed")
-                                }
-                              >
+                              <button className="text-green-400 hover:text-green-300 flex items-center" onClick={() => handleUpdateAppointmentStatus(appointment._id, "confirmed")}>
                                 <CheckCircle className="h-4 w-4 mr-1" />
                               </button>
                             )}
                             {appointment.status !== "cancelled" && (
-                              <button
-                                className="text-red-400 hover:text-red-300 flex items-center"
-                                onClick={() =>
-                                  handleUpdateAppointmentStatus(appointment._id, "cancelled")
-                                }
-                              >
+                              <button className="text-red-400 hover:text-red-300 flex items-center" onClick={() => handleUpdateAppointmentStatus(appointment._id, "cancelled")}>
                                 <XCircle className="h-4 w-4 mr-1" />
                               </button>
                             )}
-                            <button
-                              className="text-red-400 hover:text-red-300"
-                              onClick={() => handleDeleteAppointment(appointment._id)}
-                            >
+                            <button className="text-red-400 hover:text-red-300" onClick={() => handleDeleteAppointment(appointment._id)}>
                               Delete
                             </button>
                           </div>
@@ -466,34 +477,14 @@ const AdminDashboard = () => {
             </div>
           </div>
         );
-      case "analytics":
+      case "spareparts": // New Spare Parts tab
         return (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <StatCard
-                title="Total Parts"
-                value={spareParts.length}
-                icon={<Wrench className="h-8 w-8 text-green-500" />}
-                bgColor="bg-green-500/10"
-                borderColor="border-green-500/20"
-              />
-              <StatCard
-                title="Average Price"
-                value={`$${getAveragePrice()}`}
-                icon={<DollarSign className="h-8 w-8 text-yellow-500" />}
-                bgColor="bg-yellow-500/10"
-                borderColor="border-yellow-500/20"
-              />
-              <StatCard
-                title="Total Value"
-                value={`$${calculateTotalInventoryValue()}`}
-                icon={<ShoppingCart className="h-8 w-8 text-purple-500" />}
-                bgColor="bg-purple-500/10"
-                borderColor="border-purple-500/20"
-              />
-            </div>
             <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
-              <h3 className="text-lg font-semibold text-white mb-4">Spare Parts Inventory</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-semibold text-white">Spare Parts Inventory</h3>
+                <button className="px-4 py-2 bg-blue-600 rounded-lg text-white hover:bg-blue-700 transition">Add Spare Part</button>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -508,26 +499,14 @@ const AdminDashboard = () => {
                   </thead>
                   <tbody>
                     {spareParts.map((part, index) => {
-                      const finalPrice = part.discount
-                        ? part.price - part.price * (part.discount / 100)
-                        : part.price;
+                      const finalPrice = part.discount ? part.price - part.price * (part.discount / 100) : part.price;
                       return (
                         <tr key={part._id || index} className="border-b border-slate-700/50">
                           <td className="py-3 px-4 text-white">{part.name}</td>
-                          <td className="py-3 px-4 text-white">
-                            {part.description && part.description.length > 50
-                              ? `${part.description.substring(0, 50)}...`
-                              : part.description || "-"}
-                          </td>
-                          <td className="py-3 px-4 text-white">
-                            ${part.price ? part.price.toFixed(2) : "0.00"}
-                          </td>
-                          <td className="py-3 px-4 text-white">
-                            {part.discount ? `${part.discount}%` : "-"}
-                          </td>
-                          <td className="py-3 px-4 text-white">
-                            ${finalPrice ? finalPrice.toFixed(2) : "0.00"}
-                          </td>
+                          <td className="py-3 px-4 text-white">{part.description && part.description.length > 50 ? `${part.description.substring(0, 50)}...` : part.description || "-"}</td>
+                          <td className="py-3 px-4 text-white">${part.price ? part.price.toFixed(2) : "0.00"}</td>
+                          <td className="py-3 px-4 text-white">{part.discount ? `${part.discount}%` : "-"}</td>
+                          <td className="py-3 px-4 text-white">${finalPrice ? finalPrice.toFixed(2) : "0.00"}</td>
                           <td className="py-3 px-4">
                             <div className="flex space-x-3">
                               <button className="text-blue-400 hover:text-blue-300">Edit</button>
@@ -543,7 +522,31 @@ const AdminDashboard = () => {
             </div>
           </div>
         );
-      case "payments": // New Payments tab
+      case "analytics":
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StatCard title="Total Parts" value={spareParts.length} icon={<Wrench className="h-8 w-8 text-green-500" />} bgColor="bg-green-500/10" borderColor="border-green-500/20" />
+              <StatCard title="Average Price" value={`$${getAveragePrice()}`} icon={<DollarSign className="h-8 w-8 text-yellow-500" />} bgColor="bg-yellow-500/10" borderColor="border-yellow-500/20" />
+              <StatCard title="Total Value" value={`$${calculateTotalInventoryValue()}`} icon={<ShoppingCart className="h-8 w-8 text-purple-500" />} bgColor="bg-purple-500/10" borderColor="border-purple-500/20" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
+                <h3 className="text-lg font-semibold text-white mb-4">Today’s Activity (Pie)</h3>
+                <Pie data={pieData} options={{ responsive: true, plugins: { legend: { position: "top" } } }} />
+              </div>
+              <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
+                <h3 className="text-lg font-semibold text-white mb-4">Total Counts (Bar)</h3>
+                <Bar data={barData} options={{ responsive: true, scales: { y: { beginAtZero: true } } }} />
+              </div>
+              <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
+                <h3 className="text-lg font-semibold text-white mb-4">5-Day Trend (Line)</h3>
+                <Line data={lineData} options={{ responsive: true, scales: { y: { beginAtZero: true } } }} />
+              </div>
+            </div>
+          </div>
+        );
+      case "payments":
         return (
           <div className="space-y-6">
             <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
@@ -567,9 +570,7 @@ const AdminDashboard = () => {
                       <tr key={payment._id} className="border-b border-slate-700/50">
                         <td className="py-3 px-4 text-white">{payment.productName}</td>
                         <td className="py-3 px-4 text-white">${payment.productPrice.toFixed(2)}</td>
-                        <td className="py-3 px-4 text-white">
-                          {`**** **** **** ${payment.cardNumber.slice(-4)}`}
-                        </td>
+                        <td className="py-3 px-4 text-white">{`**** **** **** ${payment.cardNumber.slice(-4)}`}</td>
                         <td className="py-3 px-4 text-white">{payment.expiryDate}</td>
                         <td className="py-3 px-4 text-white">***</td>
                         <td className="py-3 px-4 text-white">{formatTimestamp(payment.timestamp)}</td>
@@ -582,7 +583,27 @@ const AdminDashboard = () => {
           </div>
         );
       case "settings":
-        return <div>Settings Coming Soon</div>;
+        return (
+          <div className="space-y-6">
+            <div className="bg-slate-800/40 rounded-xl p-6 border border-slate-700/50">
+              <h3 className="text-lg font-semibold text-white mb-4">Settings</h3>
+              <div className="space-y-4">
+                <div>
+                  <button className="w-full text-left px-4 py-3 bg-slate-700/50 rounded-lg text-white hover:bg-slate-700 transition">Profile Settings</button>
+                  <p className="text-slate-400 text-sm mt-1">Update your personal information</p>
+                </div>
+                <div>
+                  <button className="w-full text-left px-4 py-3 bg-slate-700/50 rounded-lg text-white hover:bg-slate-700 transition">Change Password</button>
+                  <p className="text-slate-400 text-sm mt-1">Secure your account with a new password</p>
+                </div>
+                <div>
+                  <button className="w-full text-left px-4 py-3 bg-slate-700/50 rounded-lg text-white hover:bg-slate-700 transition">System Configuration</button>
+                  <p className="text-slate-400 text-sm mt-1">Adjust system-wide settings</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
       default:
         return <div>Coming Soon</div>;
     }
@@ -598,17 +619,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex">
-      <button
-        className="lg:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-slate-800"
-        onClick={toggleSidebar}
-      >
+      <button className="lg:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-slate-800" onClick={toggleSidebar}>
         {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
-      <div
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 border-r border-slate-800 transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}
-      >
+      <div className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-900 border-r border-slate-800 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}>
         <div className="p-4 border-b border-slate-800">
           <div className="flex items-center space-x-3">
             <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
@@ -618,48 +632,16 @@ const AdminDashboard = () => {
           </div>
         </div>
         <nav className="flex-1 pt-4 pb-4">
-          <SidebarItem
-            icon={<Home />}
-            text="Dashboard"
-            active={activeTab === "dashboard"}
-            onClick={() => setActiveTab("dashboard")}
-          />
-          <SidebarItem
-            icon={<Users />}
-            text="Users"
-            active={activeTab === "users"}
-            onClick={() => setActiveTab("users")}
-          />
-          <SidebarItem
-            icon={<Calendar />}
-            text="Appointments"
-            active={activeTab === "appointments"}
-            onClick={() => setActiveTab("appointments")}
-          />
-          <SidebarItem
-            icon={<BarChart2 />}
-            text="Analytics"
-            active={activeTab === "analytics"}
-            onClick={() => setActiveTab("analytics")}
-          />
-          <SidebarItem
-            icon={<CreditCard />}
-            text="Payments"
-            active={activeTab === "payments"}
-            onClick={() => setActiveTab("payments")}
-          />
-          <SidebarItem
-            icon={<Settings />}
-            text="Settings"
-            active={activeTab === "settings"}
-            onClick={() => setActiveTab("settings")}
-          />
+          <SidebarItem icon={<Home />} text="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
+          <SidebarItem icon={<Users />} text="Users" active={activeTab === "users"} onClick={() => setActiveTab("users")} />
+          <SidebarItem icon={<Calendar />} text="Appointments" active={activeTab === "appointments"} onClick={() => setActiveTab("appointments")} />
+          <SidebarItem icon={<Wrench />} text="Spare Parts" active={activeTab === "spareparts"} onClick={() => setActiveTab("spareparts")} />
+          <SidebarItem icon={<BarChart2 />} text="Analytics" active={activeTab === "analytics"} onClick={() => setActiveTab("analytics")} />
+          <SidebarItem icon={<CreditCard />} text="Payments" active={activeTab === "payments"} onClick={() => setActiveTab("payments")} />
+          <SidebarItem icon={<Settings />} text="Settings" active={activeTab === "settings"} onClick={() => setActiveTab("settings")} />
         </nav>
         <div className="p-4 border-t border-slate-800">
-          <button
-            onClick={handleLogout}
-            className="flex items-center space-x-3 text-slate-400 hover:text-white transition w-full"
-          >
+          <button onClick={handleLogout} className="flex items-center space-x-3 text-slate-400 hover:text-white transition w-full">
             <LogOut className="h-5 w-5" />
             <span>Logout</span>
           </button>
@@ -671,17 +653,22 @@ const AdminDashboard = () => {
             {activeTab === "dashboard" && "Dashboard"}
             {activeTab === "users" && "User Management"}
             {activeTab === "appointments" && "Appointment Management"}
-            {activeTab === "analytics" && "Spare Parts Analytics"}
+            {activeTab === "spareparts" && "Spare Parts Management"}
+            {activeTab === "analytics" && "Analytics"}
             {activeTab === "payments" && "Payment Management"}
             {activeTab === "settings" && "Settings"}
           </h1>
           <p className="text-slate-400 mt-1">
             {activeTab === "appointments"
               ? "Manage and track all service appointments"
+              : activeTab === "spareparts"
+              ? "Manage your spare parts inventory"
               : activeTab === "analytics"
-              ? "Manage and analyze your spare parts inventory"
+              ? "Analyze MechKonnect’s performance"
               : activeTab === "payments"
               ? "View and manage all payment transactions"
+              : activeTab === "settings"
+              ? "Configure your admin preferences"
               : "Welcome to the admin panel"}
           </p>
         </header>
@@ -692,27 +679,14 @@ const AdminDashboard = () => {
 };
 
 const SidebarItem = ({ icon, text, active, onClick }) => (
-  <button
-    className={`flex items-center space-x-3 w-full px-4 py-3 text-left transition ${
-      active
-        ? "bg-blue-600/20 text-white border-r-4 border-blue-500"
-        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
-    }`}
-    onClick={onClick}
-  >
-    <span className="flex-shrink-0">
-      {React.cloneElement(icon, {
-        className: `h-5 w-5 ${active ? "text-blue-400" : "text-slate-400"}`,
-      })}
-    </span>
+  <button className={`flex items-center space-x-3 w-full px-4 py-3 text-left transition ${active ? "bg-blue-600/20 text-white border-r-4 border-blue-500" : "text-slate-400 hover:text-white hover:bg-slate-800/50"}`} onClick={onClick}>
+    <span className="flex-shrink-0">{React.cloneElement(icon, { className: `h-5 w-5 ${active ? "text-blue-400" : "text-slate-400"}` })}</span>
     <span className="font-medium">{text}</span>
   </button>
 );
 
 const StatCard = ({ title, value, icon, bgColor, borderColor }) => (
-  <div
-    className={`rounded-xl p-6 border ${borderColor} ${bgColor} flex items-center justify-between`}
-  >
+  <div className={`rounded-xl p-6 border ${borderColor} ${bgColor} flex items-center justify-between`}>
     <div>
       <p className="text-sm font-medium text-slate-400">{title}</p>
       <h3 className="text-2xl font-bold text-white mt-1">{value}</h3>
