@@ -6,8 +6,8 @@ import Card1 from "./Card1";
 
 const requestImages = [
   "https://cdn.pixabay.com/photo/2020/03/09/13/54/engineer-4915797_640.jpg",
-  "https://img.freepik.com/free-photo/auto-mechanic-working-car-mechanics-garage_1232-3446.jpg",
-  "https://img.freepik.com/free-photo/auto-repair-shop-worker-fixing-car_1232-2090.jpg",
+  "https://t3.ftcdn.net/jpg/06/42/15/52/360_F_642155259_wkEIRRSocT0VH4W8E7lneTiywgwJcvFc.jpg",
+  "https://as1.ftcdn.net/v2/jpg/08/48/72/70/1000_F_848727020_6MNG7yeaa8kpCDjuzLXsXhCiX2QWDA0a.jpg",
 ];
 
 const RequestPage = () => {

@@ -58,9 +58,11 @@ const Navbar = () => {
                 <Link to="/spare-parts" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md font-medium transition duration-300">
                   Spare Parts
                 </Link>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-300">
-                  Connect Now
-                </button>
+                <Link to="/">
+  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-300">
+    LogOut
+  </button>
+</Link>
               </div>
             </div>
             

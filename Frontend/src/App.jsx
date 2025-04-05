@@ -57,7 +57,7 @@ const App = () => {
 
 const MainLayout = () => {
   const location = useLocation();
-  const hideFooterPaths = ["/payment", "/mobile-workshop", "/uplifting", "/admin-dashboard"];
+  const hideFooterPaths = ["/payment", "/mobile-workshop", "/uplifting", "/admin-dashboard","/Welcome", "/login", "/signup", "/about", "/contact", "/return-policy", "/privacy-policy", "/mechanic-payment", "/request", "/roadside-assistance", "/smart-key", "/spare-parts", "/workshop"];
   
   return (
     <div className="flex flex-col min-h-screen">
