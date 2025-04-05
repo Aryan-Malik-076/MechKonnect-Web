@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Users,
   Home,
   LogOut,
-  Settings,
   BarChart2,
   Shield,
   Menu,
@@ -16,21 +14,21 @@ import {
   CheckCircle,
   XCircle,
   CreditCard,
+  FileText,
 } from "lucide-react";
 import { Pie, Bar, Line } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement } from "chart.js";
 
-// Register ChartJS components
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement);
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [workshops, setWorkshops] = useState([]);
   const [spareParts, setSpareParts] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [payments, setPayments] = useState([]);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Default closed on mobile
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -46,21 +44,13 @@ const AdminDashboard = () => {
       }
     };
 
-    const fetchUsers = async () => {
+    const fetchWorkshops = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/admin/users", { headers: { "x-auth-token": token } });
-        if (res.ok) {
-          const data = await res.json();
-          const staticUsers = [
-            { _id: "1", name: "Aryan", email: "aryan@example.com", title: "Senior Mechanic", role: "Admin", isAdmin: true },
-            { _id: "2", name: "Uzair", email: "uzair@example.com", title: "Sales Manager", role: "User", isAdmin: false },
-            { _id: "3", name: "Raja", email: "raja@example.com", title: "Inventory Specialist", role: "User", isAdmin: false },
-          ];
-          setUsers([...data, ...staticUsers]);
-        } else throw new Error("Failed to fetch users");
+        const res = await fetch("http://localhost:5000/api/workshops");
+        if (res.ok) setWorkshops(await res.json());
+        else throw new Error("Failed to fetch workshops");
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching workshops:", error);
       }
     };
 
@@ -99,7 +89,7 @@ const AdminDashboard = () => {
     };
 
     fetchDashboardData();
-    fetchUsers();
+    fetchWorkshops();
     fetchSpareParts();
     fetchAppointments();
     fetchPayments();
@@ -174,8 +164,8 @@ const AdminDashboard = () => {
   };
 
   const barData = {
-    labels: ["Users", "Spare Parts", "Appointments", "Payments"],
-    datasets: [{ label: "Total", data: [users.length, spareParts.length, appointments.length, payments.length], backgroundColor: "#3B82F6", borderColor: "#2563EB", borderWidth: 1 }],
+    labels: ["Workshops", "Spare Parts", "Appointments", "Payments"],
+    datasets: [{ label: "Total", data: [workshops.length, spareParts.length, appointments.length, payments.length], backgroundColor: "#3B82F6", borderColor: "#2563EB", borderWidth: 1 }],
   };
 
   const lineData = {
@@ -194,15 +184,15 @@ const AdminDashboard = () => {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard title="Total Users" value={users.length} icon={<Users className="h-8 w-8 text-blue-400" />} />
+              <StatCard title="Total Workshops" value={workshops.length} icon={<Wrench className="h-8 w-8 text-blue-400" />} />
               <StatCard title="Spare Parts" value={spareParts.length} icon={<Wrench className="h-8 w-8 text-green-400" />} />
               <StatCard title="Appointments" value={appointments.length} icon={<Calendar className="h-8 w-8 text-purple-400" />} />
               <StatCard title="Total Payments" value={payments.length} icon={<CreditCard className="h-8 w-8 text-yellow-400" />} />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-gray-800/80 rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
-                <h3 className="text-xl font-semibold text-white mb-4">Recent Users</h3>
-                <Table data={users.slice(0, 5)} columns={["Name", "Title", "Role"]} renderRow={(user) => [user.name, user.title, getStatusBadge(user.role)]} />
+                <h3 className="text-xl font-semibold text-white mb-4">Recent Workshops</h3>
+                <Table data={workshops.slice(0, 5)} columns={["Name", "Description"]} renderRow={(workshop) => [workshop.name, workshop.description.length > 50 ? `${workshop.description.substring(0, 50)}...` : workshop.description]} />
               </div>
               <div className="bg-gray-800/80 rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
                 <h3 className="text-xl font-semibold text-white mb-4">Recent Payments</h3>
@@ -211,14 +201,20 @@ const AdminDashboard = () => {
             </div>
           </div>
         );
-      case "users":
+      case "workshops":
         return (
           <div className="bg-gray-800/80 rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">All Users</h3>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Add User</button>
+              <h3 className="text-xl font-semibold text-white">All Workshops</h3>
             </div>
-            <Table data={users} columns={["Name", "Email", "Title", "Role", "Actions"]} renderRow={(user) => [user.name, user.email, user.title, getStatusBadge(user.role), <div className="flex space-x-3"><button className="text-blue-400 hover:text-blue-300">Edit</button><button className="text-red-400 hover:text-red-300">Delete</button></div>]} />
+            <Table 
+              data={workshops} 
+              columns={["Name", "Description"]} 
+              renderRow={(workshop) => [
+                workshop.name,
+                workshop.description.length > 50 ? `${workshop.description.substring(0, 50)}...` : workshop.description
+              ]} 
+            />
           </div>
         );
       case "appointments":
@@ -241,11 +237,10 @@ const AdminDashboard = () => {
           <div className="bg-gray-800/80 rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">Spare Parts Inventory</h3>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Add Spare Part</button>
             </div>
-            <Table data={spareParts} columns={["Name", "Description", "Price", "Discount", "Final Price", "Actions"]} renderRow={(part) => {
+            <Table data={spareParts} columns={["Name", "Description", "Price", "Discount", "Final Price"]} renderRow={(part) => {
               const finalPrice = part.discount ? part.price * (1 - part.discount / 100) : part.price;
-              return [part.name, part.description?.length > 50 ? `${part.description.substring(0, 50)}...` : part.description || "-", `$${part.price.toFixed(2)}`, part.discount ? `${part.discount}%` : "-", `$${finalPrice.toFixed(2)}`, <div className="flex space-x-3"><button className="text-blue-400 hover:text-blue-300">Edit</button><button className="text-red-400 hover:text-red-300">Delete</button></div>];
+              return [part.name, part.description?.length > 50 ? `${part.description.substring(0, 50)}...` : part.description || "-", `$${part.price.toFixed(2)}`, part.discount ? `${part.discount}%` : "-", `$${finalPrice.toFixed(2)}`];
             }} />
           </div>
         );
@@ -282,20 +277,32 @@ const AdminDashboard = () => {
             <Table data={payments} columns={["Product Name", "Price", "Card Number", "Expiry", "CVV", "Timestamp"]} renderRow={(payment) => [payment.productName, `$${payment.productPrice.toFixed(2)}`, `**** **** **** ${payment.cardNumber.slice(-4)}`, payment.expiryDate, "***", formatTimestamp(payment.timestamp)]} />
           </div>
         );
-      case "settings":
+      case "reports":
         return (
           <div className="bg-gray-800/80 rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
-            <h3 className="text-xl font-semibold text-white mb-6">Settings</h3>
+            <h3 className="text-xl font-semibold text-white mb-6">Reports</h3>
             <div className="space-y-6">
-              {["Profile Settings", "Change Password", "System Configuration"].map((setting, idx) => (
-                <div key={idx} className="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-all">
-                  <div>
-                    <h4 className="text-white font-medium">{setting}</h4>
-                    <p className="text-gray-400 text-sm">{setting === "Profile Settings" ? "Update your personal info" : setting === "Change Password" ? "Secure your account" : "Adjust system settings"}</p>
-                  </div>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Configure</button>
+              <div className="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-all">
+                <div>
+                  <h4 className="text-white font-medium">Workshop Performance</h4>
+                  <p className="text-gray-400 text-sm">View workshop metrics</p>
                 </div>
-              ))}
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-all">
+                <div>
+                  <h4 className="text-white font-medium">Payment Summary</h4>
+                  <p className="text-gray-400 text-sm">Financial overview</p>
+                </div>
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-all">
+                <div>
+                  <h4 className="text-white font-medium">Appointment Statistics</h4>
+                  <p className="text-gray-400 text-sm">Booking trends</p>
+                </div>
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
+              </div>
             </div>
           </div>
         );
@@ -327,12 +334,12 @@ const AdminDashboard = () => {
         <nav className="flex-1 py-4 space-y-2">
           {[
             { icon: <Home />, text: "Dashboard", tab: "dashboard" },
-            { icon: <Users />, text: "Users", tab: "users" },
+            { icon: <Wrench />, text: "Workshops", tab: "workshops" },
             { icon: <Calendar />, text: "Appointments", tab: "appointments" },
             { icon: <Wrench />, text: "Spare Parts", tab: "spareparts" },
             { icon: <BarChart2 />, text: "Analytics", tab: "analytics" },
             { icon: <CreditCard />, text: "Payments", tab: "payments" },
-            { icon: <Settings />, text: "Settings", tab: "settings" },
+            { icon: <FileText />, text: "Reports", tab: "reports" },
           ].map((item) => (
             <SidebarItem key={item.tab} icon={item.icon} text={item.text} active={activeTab === item.tab} onClick={() => setActiveTab(item.tab)} />
           ))}
@@ -344,7 +351,7 @@ const AdminDashboard = () => {
       <div className="flex-1 p-6 md:p-8">
         <header className="mb-8 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 shadow-lg">
           <h1 className="text-3xl font-bold text-white">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1).replace(/([A-Z])/g, " $1").trim() + " Management"}</h1>
-          <p className="text-gray-300 mt-2">{activeTab === "appointments" ? "Manage service appointments" : activeTab === "spareparts" ? "Oversee inventory" : activeTab === "analytics" ? "Track performance" : activeTab === "payments" ? "Monitor transactions" : activeTab === "settings" ? "Customize preferences" : "Welcome aboard!"}</p>
+          <p className="text-gray-300 mt-2">{activeTab === "workshops" ? "View workshops" : activeTab === "appointments" ? "Manage service appointments" : activeTab === "spareparts" ? "View inventory" : activeTab === "analytics" ? "Track performance" : activeTab === "payments" ? "Monitor transactions" : activeTab === "reports" ? "Generate reports" : "Welcome aboard!"}</p>
         </header>
         <main>{renderContent()}</main>
       </div>
