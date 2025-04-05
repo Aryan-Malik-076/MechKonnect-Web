@@ -30,6 +30,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [reportType, setReportType] = useState(null); // To track which report to show
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -178,6 +179,66 @@ const AdminDashboard = () => {
 
   const chartOptions = { responsive: true, plugins: { legend: { position: "top", labels: { color: "#E2E8F0" } }, tooltip: { backgroundColor: "#1E293B", titleColor: "#FFF", bodyColor: "#E2E8F0" } }, scales: { y: { beginAtZero: true, ticks: { color: "#E2E8F0" } }, x: { ticks: { color: "#E2E8F0" } } } };
 
+  const generateReport = (type) => {
+    setReportType(type);
+  };
+
+  const renderReport = () => {
+    switch (reportType) {
+      case "workshop":
+        return (
+          <div className="mt-6">
+            <h4 className="text-xl font-semibold text-white mb-4">Workshop Performance Report</h4>
+            <Table 
+              data={workshops} 
+              columns={["Name", "Total Appointments"]} 
+              renderRow={(workshop) => [
+                workshop.name,
+                appointments.filter(appt => appt.workshop === workshop.name).length
+              ]} 
+            />
+          </div>
+        );
+      case "payment":
+        return (
+          <div className="mt-6">
+            <h4 className="text-xl font-semibold text-white mb-4">Payment Summary Report</h4>
+            <Table 
+              data={payments} 
+              columns={["Product Name", "Price", "Date"]} 
+              renderRow={(payment) => [
+                payment.productName,
+                `$${payment.productPrice.toFixed(2)}`,
+                formatTimestamp(payment.timestamp)
+              ]} 
+            />
+            <p className="mt-4 text-white">Total Revenue: ${payments.reduce((sum, payment) => sum + payment.productPrice, 0).toFixed(2)}</p>
+          </div>
+        );
+      case "appointment":
+        return (
+          <div className="mt-6">
+            <h4 className="text-xl font-semibold text-white mb-4">Appointment Statistics Report</h4>
+            <Table 
+              data={appointments} 
+              columns={["Workshop", "Date", "Status"]} 
+              renderRow={(appt) => [
+                appt.workshop,
+                formatDate(appt.date),
+                getStatusBadge(appt.status)
+              ]} 
+            />
+            <p className="mt-4 text-white">Total Appointments: {appointments.length}</p>
+            <p className="text-white">Confirmed: {appointments.filter(a => a.status === "confirmed").length}</p>
+            <p className="text-white">Pending: {appointments.filter(a => a.status === "pending").length}</p>
+            <p className="text-white">Cancelled: {appointments.filter(a => a.status === "cancelled").length}</p>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
@@ -287,23 +348,24 @@ const AdminDashboard = () => {
                   <h4 className="text-white font-medium">Workshop Performance</h4>
                   <p className="text-gray-400 text-sm">View workshop metrics</p>
                 </div>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
+                <button onClick={() => generateReport("workshop")} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
               </div>
               <div className="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-all">
                 <div>
                   <h4 className="text-white font-medium">Payment Summary</h4>
                   <p className="text-gray-400 text-sm">Financial overview</p>
                 </div>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
+                <button onClick={() => generateReport("payment")} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
               </div>
               <div className="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-all">
                 <div>
                   <h4 className="text-white font-medium">Appointment Statistics</h4>
                   <p className="text-gray-400 text-sm">Booking trends</p>
                 </div>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
+                <button onClick={() => generateReport("appointment")} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Generate</button>
               </div>
             </div>
+            {renderReport()}
           </div>
         );
       default:
