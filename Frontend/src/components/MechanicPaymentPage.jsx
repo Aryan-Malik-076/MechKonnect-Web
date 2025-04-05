@@ -123,7 +123,7 @@ const MechanicPaymentPage = ({ selectedMechanic, onBack }) => {
           
           <div className="flex justify-between items-center py-2 border-b border-gray-100">
             <span className="text-gray-600">Initial Service Fee</span>
-            <span className="font-medium">33 PKR</span>
+            <span className="font-medium">330 PKR</span>
           </div>
           
           <div className="py-3 text-sm text-gray-500">
@@ -174,7 +174,7 @@ const MechanicPaymentPage = ({ selectedMechanic, onBack }) => {
               Processing...
             </>
           ) : (
-            `Pay 33 PKR & Start Tracking`
+            `Pay 330 PKR & Start Tracking`
           )}
         </button>
       </div>
