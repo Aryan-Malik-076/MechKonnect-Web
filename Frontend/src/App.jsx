@@ -11,7 +11,7 @@ import Contact from "./components/Contact";
 import AppointmentPage from "./components/AppointmentPage";
 import ReturnPolicy from "./components/ReturnPolicy";
 import PrivacyPolicy from "./components/PrivacyPolicy";
-import MechanicPaymentPage from "./components/MechanicPaymentPage";
+import MechanicTrackingPage from "./components/MechanicTrackingPage";
 import RequestPage from "./components/RequestPage";
 import RoadsideAssistancePage from "./components/RoadsideAssistancePage";
 import SmartKeyPage from "./components/SmartKeyPage";
@@ -82,7 +82,7 @@ const hideFooterPaths = ["/payment", "/mobile-workshop", "/uplifting", "/admin-d
           <Route path="/appointments/:workshopId" element={<AppointmentPage />} />
           <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/mechanic-payment" element={<MechanicPaymentPage />} />
+          <Route path="/mechanic-tracking" element={<MechanicTrackingPage />} />
           <Route path="/request" element={<RequestPage />} />
           <Route path="/roadside-assistance" element={<RoadsideAssistancePage />} />
           <Route path="/smart-key" element={<SmartKeyPage />} />

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import MapComponent from "./MapComponent";
-import MechanicPaymentPage from "./MechanicPaymentPage";
-import { MapPin, Star, Phone, MessageCircle, ArrowRight, X, DollarSign, Clock, Compass } from "lucide-react";
+import MechanicTrackingPage from "./MechanicTrackingPage"; // Updated import
+import { MapPin, ArrowRight, X, Clock, Compass } from "lucide-react";
 
 const MobileWorkshopPage = () => {
   const [selectedMechanic, setSelectedMechanic] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [showPaymentPage, setShowPaymentPage] = useState(false);
+  const [showTrackingPage, setShowTrackingPage] = useState(false); // Renamed from showPaymentPage
   const [startTracking, setStartTracking] = useState(false);
 
   const handleMechanicSelect = (mechanic) => {
@@ -19,25 +19,27 @@ const MobileWorkshopPage = () => {
     setTimeout(() => setSelectedMechanic(null), 300);
   };
 
-  const handleBookAppointment = () => {
+  const handleStartTracking = () => {
     setShowDetails(false);
-    setShowPaymentPage(true);
+    setShowTrackingPage(true); // Show tracking page
   };
 
-  const handleBackFromPayment = (paymentSuccess = false) => {
-    setShowPaymentPage(false);
-    if (paymentSuccess) {
-      setStartTracking(true); // Start tracking after successful payment
+  const handleBackFromTracking = (trackingStarted = false) => {
+    setShowTrackingPage(false);
+    if (trackingStarted) {
+      setStartTracking(true); // Start tracking after button click
     } else {
       setSelectedMechanic(null);
+      setStartTracking(false);
     }
   };
 
-  if (showPaymentPage) {
+  if (showTrackingPage) {
     return (
-      <MechanicPaymentPage 
+      <MechanicTrackingPage
         selectedMechanic={selectedMechanic}
-        onBack={handleBackFromPayment}
+        onBack={handleBackFromTracking}
+        setStartTracking={setStartTracking}
       />
     );
   }
@@ -51,28 +53,24 @@ const MobileWorkshopPage = () => {
             Mobile Workshop
           </h1>
           <div className="flex items-center space-x-3">
-            <button className="bg-white text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-              Filter
-            </button>
-            <button className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-              Help
-            </button>
+            <button className="bg-white text-blue-600 px-3 py-1 rounded-full text-sm font-medium">Filter</button>
+            <button className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">Help</button>
           </div>
         </div>
       </header>
 
       <div className="relative h-[calc(100vh-80px)]">
-        <MapComponent 
+        <MapComponent
           setSelectedMechanic={handleMechanicSelect}
           startTracking={startTracking}
-          selectedMechanic={startTracking ? selectedMechanic : null}
+          selectedMechanic={selectedMechanic}
         />
-        
+
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2 text-sm border border-gray-200">
           <Compass className="h-4 w-4 text-blue-600" />
           <span className="font-medium">Current Location</span>
         </div>
-        
+
         <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg flex flex-col border border-gray-200">
           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-t-lg border-b border-gray-200">+</button>
           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-b-lg">−</button>
@@ -80,7 +78,7 @@ const MobileWorkshopPage = () => {
       </div>
 
       {selectedMechanic && !startTracking && (
-        <div 
+        <div
           className={`fixed inset-x-0 bottom-0 bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-in-out ${
             showDetails ? "translate-y-0" : "translate-y-full"
           }`}
@@ -89,8 +87,8 @@ const MobileWorkshopPage = () => {
           <div className="flex justify-center pt-2 pb-4 sticky top-0 bg-white z-10">
             <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
           </div>
-          
-          <button 
+
+          <button
             onClick={closeDetails}
             className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-colors"
           >
@@ -100,77 +98,29 @@ const MobileWorkshopPage = () => {
           <div className="px-6 pb-24">
             <div className="flex items-start gap-4 mb-6">
               <div className="bg-blue-100 rounded-full p-3">
-                <img 
-                  src={selectedMechanic.image || "/api/placeholder/64/64"} 
+                <img
+                  src={selectedMechanic.image || "/api/placeholder/64/64"}
                   alt={selectedMechanic.name}
                   className="h-16 w-16 rounded-full object-cover"
                 />
               </div>
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-gray-800">{selectedMechanic.name}</h2>
-                <div className="flex items-center gap-1 mb-1">
-                  <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                  <span className="font-medium text-gray-700">{selectedMechanic.recommendations || "4.5"}</span>
-                  <span className="text-gray-500 text-sm">({selectedMechanic.reviewCount || "124"} reviews)</span>
-                </div>
                 <div className="flex items-center text-gray-600 text-sm">
                   <Clock className="h-3 w-3 mr-1" />
-                  <span>{selectedMechanic.responseTime || "15-20 min"} response time</span>
+                  <span>15-20 min response time</span>
                   <span className="mx-2">•</span>
-                  <span>{selectedMechanic.distance || "1.2 km"} away</span>
+                  <span>1.2 km away</span>
                 </div>
               </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              {(selectedMechanic.expertise || ["Engine Repair", "Brake Service", "Electrical"]).map((tag, index) => (
-                <span 
-                  key={index} 
-                  className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2 text-gray-800">About</h3>
-              <p className="text-gray-600">
-                {selectedMechanic.description || "Professional mechanic with over 10 years of experience specializing in automotive repair and maintenance."}
-              </p>
-            </div>
-
-            <div className="bg-blue-50 rounded-xl p-4 mb-6">
-              <h3 className="text-lg font-semibold mb-2 text-gray-800">Pricing</h3>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center">
-                  <DollarSign className="h-4 w-4 text-blue-600 mr-2" />
-                  <span className="text-gray-700">Initial Charge</span>
-                </div>
-                <span className="font-bold text-blue-700">{selectedMechanic.initialCharge || "330"} PKR</span>
-              </div>
-              <div className="text-sm text-gray-500">
-                *Additional charges may apply based on repairs needed
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium flex items-center justify-center transition-colors">
-                <Phone className="h-4 w-4 mr-2" />
-                Call Now
-              </button>
-              <button className="flex-1 bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 py-3 rounded-xl font-medium flex items-center justify-center transition-colors">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Message
-              </button>
             </div>
 
             <div className="mt-6">
-              <button 
-                onClick={handleBookAppointment}
+              <button
+                onClick={handleStartTracking}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-medium flex items-center justify-center transition-colors"
               >
-                Book Appointment
+                Start Tracking
                 <ArrowRight className="h-4 w-4 ml-2" />
               </button>
             </div>
