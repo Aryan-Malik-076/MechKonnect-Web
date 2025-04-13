@@ -123,20 +123,26 @@ const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic, on
         whenCreated={(map) => {
           L.control.fullscreen({ position: "topright" }).addTo(map);
         }}
-        zoomControl={false} // Disable default zoom controls
+        zoomControl={false}
       >
         <MapUpdater center={userLocation} />
         <LayersControl position="topright">
-          <LayersControl.BaseLayer checked name="Standard Map">
+          <LayersControl.BaseLayer checked name="Street Map">
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="© OpenStreetMap contributors"
+              attribution="© Esri, Maxar, Earthstar Geographics"
             />
           </LayersControl.BaseLayer>
           <LayersControl.BaseLayer name="Satellite View">
             <TileLayer
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-              attribution="© Esri"
+              attribution="© Esri, Maxar, Earthstar Geographics"
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Topographic Map">
+            <TileLayer
+              url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+              attribution='© <a href="https://opentopomap.org/">OpenTopoMap</a> contributors'
             />
           </LayersControl.BaseLayer>
         </LayersControl>

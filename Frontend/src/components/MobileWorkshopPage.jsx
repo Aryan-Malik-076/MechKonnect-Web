@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Added for navigation
 import MapComponent from "./MapComponent";
 import MechanicTrackingPage from "./MechanicTrackingPage";
 import { MapPin, ArrowRight, X, Clock, Compass } from "lucide-react";
@@ -10,12 +11,14 @@ const MobileWorkshopPage = () => {
   const [showTrackingPage, setShowTrackingPage] = useState(false);
   const [startTracking, setStartTracking] = useState(false);
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [showThankYouPopup, setShowThankYouPopup] = useState(false); // Added for thank you popup
   const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: "",
     expiryDate: "",
     cvv: "",
   });
   const [paymentError, setPaymentError] = useState("");
+  const navigate = useNavigate(); // Added for navigation
 
   const handleMechanicSelect = (mechanic) => {
     setSelectedMechanic(mechanic);
@@ -84,13 +87,18 @@ const MobileWorkshopPage = () => {
         paymentMethod: "card",
         cardDetails: {
           ...paymentDetails,
-          cardNumber: `**** **** **** ${paymentDetails.cardNumber.slice(-4)}`, // Mask card number
+          cardNumber: `**** **** **** ${paymentDetails.cardNumber.slice(-4)}`,
         },
       });
       setShowPaymentPopup(false);
       setPaymentDetails({ cardNumber: "", expiryDate: "", cvv: "" });
       setStartTracking(false);
       setSelectedMechanic(null);
+      setShowThankYouPopup(true); // Show thank you popup
+      setTimeout(() => {
+        setShowThankYouPopup(false);
+        navigate("/roadside-assistance"); // Navigate to roadside-assistance
+      }, 3000); // Show popup for 3 seconds
     } catch (error) {
       console.error("Mechanic payment error:", error);
       setPaymentError("Failed to process payment. Please try again.");
@@ -205,9 +213,7 @@ const MobileWorkshopPage = () => {
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Payment</h2>
             <p className="text-gray-600 mb-6 text-lg">Total Amount: $50</p>
-            {paymentError && (
-              <p className="text-red-500 mb-4 text-sm">{paymentError}</p>
-            )}
+            {paymentError && <p className="text-red-500 mb-4 text-sm">{paymentError}</p>}
             <form onSubmit={handlePaymentSubmit}>
               <div className="mb-4">
                 <input
@@ -215,7 +221,7 @@ const MobileWorkshopPage = () => {
                   placeholder="Card Number (16 digits)"
                   value={paymentDetails.cardNumber}
                   onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '').slice(0, 16);
+                    const value = e.target.value.replace(/\D/g, "").slice(0, 16);
                     setPaymentDetails({ ...paymentDetails, cardNumber: value });
                   }}
                   className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400"
@@ -236,7 +242,7 @@ const MobileWorkshopPage = () => {
                   placeholder="CVV"
                   value={paymentDetails.cvv}
                   onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                    const value = e.target.value.replace(/\D/g, "").slice(0, 4);
                     setPaymentDetails({ ...paymentDetails, cvv: value });
                   }}
                   className="w-1/2 p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 placeholder-gray-400"
@@ -250,6 +256,20 @@ const MobileWorkshopPage = () => {
                 Pay Now
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showThankYouPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[1000]">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-100">
+            <div className="mb-6">
+              <svg className="h-16 w-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h2>
+            <p className="text-gray-600 mb-6 text-lg">Thanks for choosing Meckonnect</p>
           </div>
         </div>
       )}
