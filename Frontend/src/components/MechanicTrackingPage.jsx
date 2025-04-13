@@ -3,8 +3,9 @@ import { ArrowLeft, Clock } from "lucide-react";
 
 const MechanicTrackingPage = ({ selectedMechanic, onBack, setStartTracking }) => {
   const handleStartTracking = () => {
-    setStartTracking(true); // Trigger tracking immediately
-    onBack(true); // Return to the map with tracking enabled
+    console.log("Tracking confirmed"); // Debug
+    setStartTracking(true);
+    onBack(true);
   };
 
   return (
@@ -29,7 +30,7 @@ const MechanicTrackingPage = ({ selectedMechanic, onBack, setStartTracking }) =>
               />
             </div>
             <div>
-              <h2 className="font-bold text-gray-800">{selectedMechanic?.name || "Ali Mechanic"}</h2>
+              <h2 className="font-bold text-gray-800">{selectedMechanic?.name || "Unknown Mechanic"}</h2>
               <div className="flex items-center text-gray-600 text-xs">
                 <Clock className="h-3 w-3 mr-1" />
                 <span>Est. arrival: 15-20 min</span>
@@ -44,7 +45,7 @@ const MechanicTrackingPage = ({ selectedMechanic, onBack, setStartTracking }) =>
           onClick={handleStartTracking}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-medium flex items-center justify-center transition-colors"
         >
-          Start Tracking
+          Confirm Tracking
         </button>
       </div>
     </div>

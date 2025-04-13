@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, LayersControl, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import "leaflet-fullscreen";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
+import "leaflet-fullscreen";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -43,12 +43,14 @@ const MapUpdater = ({ center }) => {
   return null;
 };
 
-const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic }) => {
+const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic, onWorkComplete }) => {
   const [userLocation, setUserLocation] = useState([33.7665, 72.3581]);
-  const [trackingLine, setTrackingLine] = useState(null);
+  const [trackingLine, setTrackingLine] = useState([]);
   const [mechanicLocation, setMechanicLocation] = useState(null);
   const [hasArrived, setHasArrived] = useState(false);
   const [showArrivalPopup, setShowArrivalPopup] = useState(false);
+  const [workCompleted, setWorkCompleted] = useState(false);
+  const [showWorkCompletePopup, setShowWorkCompletePopup] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -68,7 +70,7 @@ const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic }) 
     if (startTracking && selectedMechanic && userLocation && !hasArrived) {
       const initialMechanicLocation = [selectedMechanic.location.coordinates[1], selectedMechanic.location.coordinates[0]];
       setMechanicLocation(initialMechanicLocation);
-      setTrackingLine({ userLocation, mechanicLocation: initialMechanicLocation });
+      setTrackingLine([userLocation, initialMechanicLocation]);
 
       const interval = setInterval(() => {
         setMechanicLocation((prevLocation) => {
@@ -78,31 +80,38 @@ const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic }) 
           const targetLat = userLocation[0];
           const targetLng = userLocation[1];
 
-          // Move 5% closer to the user each interval
-          const newLat = lat + (targetLat - lat) * 0.05;
-          const newLng = lng + (targetLng - lng) * 0.05;
+          const newLat = lat + (targetLat - lat) * 0.2;
+          const newLng = lng + (targetLng - lng) * 0.2;
 
           const distance = Math.sqrt((newLat - targetLat) ** 2 + (newLng - targetLng) ** 2);
-          if (distance < 0.0005) { // Approx 50 meters
+          if (distance < 0.0005) {
             clearInterval(interval);
             setMechanicLocation([targetLat, targetLng]);
-            setTrackingLine({ userLocation, mechanicLocation: [targetLat, targetLng] });
+            setTrackingLine([userLocation, [targetLat, targetLng]]);
             setHasArrived(true);
             setShowArrivalPopup(true);
+
+            setTimeout(() => {
+              setWorkCompleted(true);
+              setShowWorkCompletePopup(true);
+              setShowArrivalPopup(false);
+              if (onWorkComplete) onWorkComplete();
+            }, 15000);
           } else {
-            setTrackingLine({ userLocation, mechanicLocation: [newLat, newLng] });
+            setTrackingLine([userLocation, [newLat, newLng]]);
           }
 
           return [newLat, newLng];
         });
-      }, 2000); // Update every 2 seconds
+      }, 500);
 
       return () => clearInterval(interval);
     }
-  }, [startTracking, selectedMechanic, userLocation, hasArrived]);
+  }, [startTracking, selectedMechanic, userLocation, hasArrived, onWorkComplete]);
 
   const handleClosePopup = () => {
     setShowArrivalPopup(false);
+    setShowWorkCompletePopup(false);
   };
 
   return (
@@ -110,18 +119,25 @@ const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic }) 
       <MapContainer
         center={userLocation}
         zoom={13}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100%", width: "100%", zIndex: 0 }}
         whenCreated={(map) => {
           L.control.fullscreen({ position: "topright" }).addTo(map);
         }}
+        zoomControl={false} // Disable default zoom controls
       >
         <MapUpdater center={userLocation} />
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="Standard Map">
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" />
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution="© OpenStreetMap contributors"
+            />
           </LayersControl.BaseLayer>
           <LayersControl.BaseLayer name="Satellite View">
-            <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="© Esri" />
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution="© Esri"
+            />
           </LayersControl.BaseLayer>
         </LayersControl>
 
@@ -149,14 +165,14 @@ const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic }) 
           </Marker>
         ))}
 
-        {startTracking && selectedMechanic && mechanicLocation && (
+        {startTracking && selectedMechanic && mechanicLocation && trackingLine.length === 2 && (
           <>
             <Marker position={mechanicLocation} icon={createCustomIcon("fas fa-tools", "green")}>
               <Popup>
                 {hasArrived ? `${selectedMechanic.name} has arrived!` : `${selectedMechanic.name} is on the way...`}
               </Popup>
             </Marker>
-            <Polyline positions={[trackingLine.userLocation, trackingLine.mechanicLocation]} color="blue" weight={4} />
+            <Polyline positions={trackingLine} color="blue" weight={4} />
           </>
         )}
       </MapContainer>
@@ -165,20 +181,32 @@ const MapComponent = ({ setSelectedMechanic, startTracking, selectedMechanic }) 
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-105">
             <div className="mb-6">
-              <svg
-                className="h-16 w-16 text-green-500 mx-auto"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg className="h-16 w-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Road Hero is Here!</h2>
-            <p className="text-gray-600 mb-6">
-              {selectedMechanic.name} has arrived and we will fix your problem shortly.
-            </p>
+            <p className="text-gray-600 mb-6">{selectedMechanic.name} has arrived and will start working shortly.</p>
+            <button
+              onClick={handleClosePopup}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors shadow-md"
+            >
+              Okay
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showWorkCompletePopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md text-center transform transition-all duration-300 scale-105">
+            <div className="mb-6">
+              <svg className="h-16 w-16 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Work Completed!</h2>
+            <p className="text-gray-600 mb-6">{selectedMechanic.name} has finished the job.</p>
             <button
               onClick={handleClosePopup}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors shadow-md"

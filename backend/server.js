@@ -9,6 +9,7 @@ import sparePartsRoutes from "./routes/spareParts.js";
 import workshopRoutes from "./routes/workshopRoutes.js";
 import mechanicRoutes from "./routes/mechanicRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import mechanicPaymentRoutes from "./routes/mechanicPaymentRoutes.js";
 import trackingRoutes from "./routes/trackingRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
@@ -32,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 // Static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Database Connection with enhanced error handling
+// Database Connection
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
@@ -40,19 +41,6 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     });
     console.log("✅ MongoDB Connected");
-    
-    // Connection event listeners
-    mongoose.connection.on("connected", () => {
-      console.log("Mongoose connected to DB");
-    });
-    
-    mongoose.connection.on("error", (err) => {
-      console.error("Mongoose connection error:", err);
-    });
-    
-    mongoose.connection.on("disconnected", () => {
-      console.log("Mongoose disconnected");
-    });
   } catch (error) {
     console.error("❌ MongoDB Connection Error:", error.message);
     process.exit(1);
@@ -68,6 +56,7 @@ app.use("/api/spareParts", sparePartsRoutes);
 app.use("/api/workshops", workshopRoutes);
 app.use("/api/mechanics", mechanicRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/mechanic-payments", mechanicPaymentRoutes); // Ensure this is included
 app.use("/api/tracking", trackingRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/contact", contactRoutes);
@@ -84,12 +73,10 @@ app.get("/api/health", (req, res) => {
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
-  
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 } else {
-  // Root endpoint for development
   app.get("/", (req, res) => {
     res.send("🚀 API is running successfully!");
   });
@@ -113,21 +100,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Graceful shutdown
-process.on("SIGINT", async () => {
-  await mongoose.connection.close();
-  console.log("MongoDB connection closed due to app termination");
-  process.exit(0);
-});
-
 // Start Server
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV || "development"} mode on port ${PORT}`);
-});
-
-// Handle unhandled promise rejections
-process.on("unhandledRejection", (err) => {
-  console.error("❌ Unhandled Rejection:", err);
-  server.close(() => process.exit(1));
 });
