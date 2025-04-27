@@ -1,35 +1,34 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home,
   LogOut,
   BarChart2,
-  Shield,
   Menu,
   X,
   Wrench,
   ShoppingCart,
   DollarSign,
   Calendar,
-  CheckCircle,
-  XCircle,
   CreditCard,
   FileText,
-  Settings,
-  Users,
   Bell,
   Search,
   Download,
   TrendingUp,
   AlertCircle,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Pie, Bar, Line } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title } from "chart.js";
+import { saveAs } from 'file-saver';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title);
 
 const StatCard = ({ title, value, icon, trend, trendUp, bg }) => (
-  <div className={`bg-gray-800 rounded-xl p-6 shadow-lg bg-gradient-to-br ${bg}`}>
+  <div className={`bg-gray-800 rounded-xl p-6 shadow-lg bg-gradient-to-br ${bg} transform hover:scale-105 transition-all duration-300`}>
     <div className="flex justify-between items-center mb-4">
       <h3 className="text-sm font-medium text-gray-400">{title}</h3>
       {icon}
@@ -57,14 +56,14 @@ const Table = ({ data, columns, renderRow }) => (
         {data.map((item, index) => {
           const rowData = renderRow(item);
           return (
-            <tr key={index} className="bg-gray-800 border-b border-gray-700 hover:bg-gray-700">
+            <tr key={index} className="bg-gray-800 border-b border-gray-700 hover:bg-gray-700 transition-colors">
               {rowData.map((cell, cellIndex) => (
                 <td key={cellIndex} className="px-6 py-4">{cell}</td>
               ))}
               <td className="px-6 py-4">
                 <div className="flex gap-2">
-                  <button className="text-blue-400 hover:text-blue-300">Edit</button>
-                  <button className="text-red-400 hover:text-red-300">Delete</button>
+                  <button className="text-blue-400 hover:text-blue-300 transition">Edit</button>
+                  <button className="text-red-400 hover:text-red-300 transition">Delete</button>
                 </div>
               </td>
             </tr>
@@ -92,6 +91,7 @@ const AdminDashboard = () => {
     { id: 3, message: "Low inventory alert", time: "Yesterday", read: true },
   ]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
         console.error("Error fetching dashboard data:", error);
       }
     };
-
+    
     const fetchWorkshops = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/workshops");
@@ -166,6 +166,7 @@ const AdminDashboard = () => {
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleNotifications = () => setShowNotifications(!showNotifications);
+  const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const calculateTotalInventoryValue = () =>
     spareParts.reduce((total, part) => total + (part.discount ? part.price * (1 - part.discount / 100) : part.price), 0).toFixed(2);
@@ -225,7 +226,7 @@ const AdminDashboard = () => {
   const todayAppointments = appointments.filter((appt) => formatDate(appt.date) === formatDate(today)).length;
   const todayPayments = payments.filter((pay) => formatDate(pay.timestamp) === formatDate(today)).length;
   const unreadNotifications = notifications.filter(notif => !notif.read).length;
-  
+
   const currentMonth = new Date().getMonth();
   const monthlyRevenue = payments
     .filter(payment => new Date(payment.timestamp).getMonth() === currentMonth)
@@ -237,29 +238,29 @@ const AdminDashboard = () => {
 
   const pieData = {
     labels: ["Confirmed", "Pending", "Cancelled", "Completed"],
-    datasets: [{ 
+    datasets: [{
       data: [
         appointments.filter(a => a.status === "confirmed").length,
         appointments.filter(a => a.status === "pending").length,
         appointments.filter(a => a.status === "cancelled").length,
         appointments.filter(a => a.status === "completed").length
-      ], 
-      backgroundColor: ["#10B981", "#F59E0B", "#EF4444", "#3B82F6"], 
-      hoverBackgroundColor: ["#34D399", "#FBBF24", "#F87171", "#60A5FA"] 
+      ],
+      backgroundColor: ["#10B981", "#F59E0B", "#EF4444", "#3B82F6"],
+      hoverBackgroundColor: ["#34D399", "#FBBF24", "#F87171", "#60A5FA"]
     }],
   };
 
   const barData = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
-      { 
-        label: "Appointments", 
-        data: [5, 7, 10, 8, 12, 3, 2], 
+      {
+        label: "Appointments",
+        data: [5, 7, 10, 8, 12, 3, 2],
         backgroundColor: "#3B82F6"
       },
-      { 
-        label: "Sales", 
-        data: [3, 4, 8, 6, 9, 2, 1], 
+      {
+        label: "Sales",
+        data: [3, 4, 8, 6, 9, 2, 1],
         backgroundColor: "#10B981"
       }
     ],
@@ -268,85 +269,122 @@ const AdminDashboard = () => {
   const lineData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
-      { 
-        label: "Revenue", 
-        data: [4200, 5800, 4900, 6500, 7200, monthlyRevenue], 
-        borderColor: "#10B981", 
-        tension: 0.4, 
-        fill: false 
+      {
+        label: "Revenue",
+        data: [4200, 5800, 4900, 6500, 7200, monthlyRevenue],
+        borderColor: "#10B981",
+        tension: 0.4,
+        fill: false
       },
-      { 
-        label: "Expenses", 
-        data: [3200, 4100, 3400, 4800, 5100, 5400], 
-        borderColor: "#F59E0B", 
-        tension: 0.4, 
-        fill: false 
+      {
+        label: "Expenses",
+        data: [3200, 4100, 3400, 4800, 5100, 5400],
+        borderColor: "#F59E0B",
+        tension: 0.4,
+        fill: false
       },
     ],
   };
 
-  const chartOptions = { 
-    responsive: true, 
+  const chartOptions = {
+    responsive: true,
     maintainAspectRatio: false,
-    plugins: { 
-      legend: { 
-        position: "top", 
-        labels: { 
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
           color: "#E2E8F0",
           boxWidth: 12,
           padding: 15
-        } 
-      }, 
-      tooltip: { 
-        backgroundColor: "#1E293B", 
-        titleColor: "#FFF", 
+        }
+      },
+      tooltip: {
+        backgroundColor: "#1E293B",
+        titleColor: "#FFF",
         bodyColor: "#E2E8F0",
         padding: 12,
         cornerRadius: 8
-      } 
-    }, 
-    scales: { 
-      y: { 
-        beginAtZero: true, 
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
         grid: {
           color: "#334155",
           drawBorder: false,
         },
-        ticks: { 
-          color: "#94A3B8" 
-        } 
-      }, 
-      x: { 
+        ticks: {
+          color: "#94A3B8"
+        }
+      },
+      x: {
         grid: {
           display: false,
           drawBorder: false,
         },
-        ticks: { 
-          color: "#94A3B8" 
-        } 
-      } 
-    } 
+        ticks: {
+          color: "#94A3B8"
+        }
+      }
+    }
   };
 
   const generateReport = (type) => {
     setReportType(type);
   };
 
+  const exportReport = (type) => {
+    let csvContent = '';
+    let filename = '';
+
+    switch (type) {
+      case 'workshop':
+        csvContent = 'Name,Total Appointments,Performance\n' +
+          workshops.map(workshop => 
+            `${workshop.name},${appointments.filter(appt => appt.workshop === workshop.name).length},${Math.min(100, appointments.filter(appt => appt.workshop === workshop.name).length * 5)}%`
+          ).join('\n');
+        filename = 'workshop_performance.csv';
+        break;
+      case 'payment':
+        csvContent = 'Product Name,Price,Date,Status\n' +
+          payments.map(payment => 
+            `${payment.productName},${payment.productPrice.toFixed(2)},${formatTimestamp(payment.timestamp)},Completed`
+          ).join('\n');
+        filename = 'payment_summary.csv';
+        break;
+      case 'appointment':
+        csvContent = 'Workshop,Date,Customer,Status\n' +
+          appointments.map(appt => 
+            `${appt.workshop},${formatDate(appt.date)},${appt.name},${appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}`
+          ).join('\n');
+        filename = 'appointment_statistics.csv';
+        break;
+      default:
+        return;
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, filename);
+  };
+
   const renderReport = () => {
     switch (reportType) {
       case "workshop":
         return (
-          <div className="mt-6">
+          <div className="mt-6 animate-fade-in">
             <div className="flex justify-between items-center mb-4">
               <h4 className="text-xl font-semibold text-white">Workshop Performance Report</h4>
-              <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+              <button
+                onClick={() => exportReport('workshop')}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition transform hover:scale-105"
+              >
                 <Download size={16} />
                 Export Report
               </button>
             </div>
-            <Table 
-              data={workshops} 
-              columns={["Name", "Total Appointments", "Performance"]} 
+            <Table
+              data={workshops}
+              columns={["Name", "Total Appointments", "Performance"]}
               renderRow={(workshop) => [
                 workshop.name,
                 appointments.filter(appt => appt.workshop === workshop.name).length,
@@ -356,40 +394,43 @@ const AdminDashboard = () => {
                   </div>
                   <span className="text-xs text-gray-400">{Math.min(100, appointments.filter(appt => appt.workshop === workshop.name).length * 5)}%</span>
                 </div>
-              ]} 
+              ]}
             />
           </div>
         );
       case "payment":
         return (
-          <div className="mt-6">
+          <div className="mt-6 animate-fade-in">
             <div className="flex justify-between items-center mb-4">
               <h4 className="text-xl font-semibold text-white">Payment Summary Report</h4>
-              <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+              <button
+                onClick={() => exportReport('payment')}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition transform hover:scale-105"
+              >
                 <Download size={16} />
                 Export Report
               </button>
             </div>
-            <Table 
-              data={payments} 
-              columns={["Product Name", "Price", "Date", "Status"]} 
+            <Table
+              data={payments}
+              columns={["Product Name", "Price", "Date", "Status"]}
               renderRow={(payment) => [
                 payment.productName,
                 `$${payment.productPrice.toFixed(2)}`,
                 formatTimestamp(payment.timestamp),
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-xs">Completed</span>
-              ]} 
+              ]}
             />
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Total Revenue</p>
                 <p className="text-white text-xl font-bold">${payments.reduce((sum, payment) => sum + payment.productPrice, 0).toFixed(2)}</p>
               </div>
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Average Transaction</p>
                 <p className="text-white text-xl font-bold">${(payments.reduce((sum, payment) => sum + payment.productPrice, 0) / (payments.length || 1)).toFixed(2)}</p>
               </div>
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Total Transactions</p>
                 <p className="text-white text-xl font-bold">{payments.length}</p>
               </div>
@@ -398,28 +439,31 @@ const AdminDashboard = () => {
         );
       case "appointment":
         return (
-          <div className="mt-6">
+          <div className="mt-6 animate-fade-in">
             <div className="flex justify-between items-center mb-4">
               <h4 className="text-xl font-semibold text-white">Appointment Statistics Report</h4>
-              <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+              <button
+                onClick={() => exportReport('appointment')}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition transform hover:scale-105"
+              >
                 <Download size={16} />
                 Export Report
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Total</p>
                 <p className="text-white text-xl font-bold">{appointments.length}</p>
               </div>
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Confirmed</p>
                 <p className="text-green-400 text-xl font-bold">{appointments.filter(a => a.status === "confirmed").length}</p>
               </div>
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Pending</p>
                 <p className="text-yellow-400 text-xl font-bold">{appointments.filter(a => a.status === "pending").length}</p>
               </div>
-              <div className="bg-gray-800 p-4 rounded-xl">
+              <div className="bg-gray-800 p-4 rounded-xl transform hover:scale-105 transition-all">
                 <p className="text-gray-400 text-sm mb-1">Cancelled</p>
                 <p className="text-red-400 text-xl font-bold">{appointments.filter(a => a.status === "cancelled").length}</p>
               </div>
@@ -430,15 +474,15 @@ const AdminDashboard = () => {
                 <Pie data={pieData} options={{...chartOptions, plugins: {...chartOptions.plugins, legend: {...chartOptions.plugins.legend, position: 'right'}}}} />
               </div>
             </div>
-            <Table 
-              data={appointments} 
-              columns={["Workshop", "Date", "Customer", "Status"]} 
+            <Table
+              data={appointments}
+              columns={["Workshop", "Date", "Customer", "Status"]}
               renderRow={(appt) => [
                 appt.workshop,
                 formatDate(appt.date),
                 appt.name,
                 getStatusBadge(appt.status)
-              ]} 
+              ]}
             />
           </div>
         );
@@ -453,41 +497,41 @@ const AdminDashboard = () => {
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard 
-                title="Monthly Revenue" 
-                value={`$${monthlyRevenue.toFixed(2)}`} 
-                icon={<DollarSign className="h-6 w-6 text-green-400" />} 
-                trend="+12%" 
+              <StatCard
+                title="Monthly Revenue"
+                value={`$${monthlyRevenue.toFixed(2)}`}
+                icon={<DollarSign className="h-6 w-6 text-green-400" />}
+                trend="+12%"
                 trendUp={true}
                 bg="from-green-600/20 to-green-500/5"
               />
-              <StatCard 
-                title="Weekly Appointments" 
-                value={weeklyAppointments} 
-                icon={<Calendar className="h-6 w-6 text-blue-400" />} 
-                trend="+5%" 
+              <StatCard
+                title="Weekly Appointments"
+                value={weeklyAppointments}
+                icon={<Calendar className="h-6 w-6 text-blue-400" />}
+                trend="+5%"
                 trendUp={true}
                 bg="from-blue-600/20 to-blue-500/5"
               />
-              <StatCard 
-                title="Inventory Value" 
-                value={`$${calculateTotalInventoryValue()}`} 
-                icon={<ShoppingCart className="h-6 w-6 text-purple-400" />} 
-                trend="-3%" 
+              <StatCard
+                title="Inventory Value"
+                value={`$${calculateTotalInventoryValue()}`}
+                icon={<ShoppingCart className="h-6 w-6 text-purple-400" />}
+                trend="-3%"
                 trendUp={false}
                 bg="from-purple-600/20 to-purple-500/5"
               />
-              <StatCard 
-                title="Active Workshops" 
-                value={workshops.length} 
-                icon={<Wrench className="h-6 w-6 text-yellow-400" />} 
-                trend="Stable" 
+              <StatCard
+                title="Active Workshops"
+                value={workshops.length}
+                icon={<Wrench className="h-6 w-6 text-yellow-400" />}
+                trend="Stable"
                 bg="from-yellow-600/20 to-yellow-500/5"
               />
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="col-span-2 bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+              <div className="col-span-2 bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
                 <div className="px-6 py-4 border-b border-gray-700">
                   <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                     <TrendingUp size={18} className="text-blue-400" />
@@ -498,8 +542,8 @@ const AdminDashboard = () => {
                   <Line data={lineData} options={chartOptions} />
                 </div>
               </div>
-              
-              <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+
+              <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
                 <div className="px-6 py-4 border-b border-gray-700">
                   <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                     <BarChart2 size={18} className="text-blue-400" />
@@ -511,9 +555,9 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="col-span-2 bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+              <div className="col-span-2 bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
                 <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                   <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                     <Calendar size={18} className="text-blue-400" />
@@ -522,9 +566,9 @@ const AdminDashboard = () => {
                   <button className="text-sm text-blue-400 hover:text-blue-300 transition">View All</button>
                 </div>
                 <div className="overflow-x-auto">
-                  <Table 
-                    data={appointments.slice(0, 5)} 
-                    columns={["Customer", "Workshop", "Date", "Time", "Status"]} 
+                  <Table
+                    data={appointments.slice(0, 5)}
+                    columns={["Customer", "Workshop", "Date", "Time", "Status"]}
                     renderRow={(appt) => [
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
@@ -539,12 +583,12 @@ const AdminDashboard = () => {
                       formatDate(appt.date),
                       formatTime(appt.time),
                       getStatusBadge(appt.status)
-                    ]} 
+                    ]}
                   />
                 </div>
               </div>
-              
-              <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+
+              <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
                 <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
                   <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                     <AlertCircle size={18} className="text-blue-400" />
@@ -553,7 +597,7 @@ const AdminDashboard = () => {
                   <button className="text-sm text-blue-400 hover:text-blue-300 transition">View All</button>
                 </div>
                 <div className="p-4 space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg transform hover:scale-105 transition-all">
                     <div className="p-2 rounded-full bg-red-500/20 text-red-400">
                       <AlertCircle size={16} />
                     </div>
@@ -562,7 +606,7 @@ const AdminDashboard = () => {
                       <p className="text-xs text-gray-400">5 items below threshold</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg transform hover:scale-105 transition-all">
                     <div className="p-2 rounded-full bg-yellow-500/20 text-yellow-400">
                       <AlertCircle size={16} />
                     </div>
@@ -571,7 +615,7 @@ const AdminDashboard = () => {
                       <p className="text-xs text-gray-400">3 require confirmation</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg transform hover:scale-105 transition-all">
                     <div className="p-2 rounded-full bg-blue-500/20 text-blue-400">
                       <Bell size={16} />
                     </div>
@@ -587,7 +631,7 @@ const AdminDashboard = () => {
         );
       case "workshops":
         return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
             <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <Wrench size={18} className="text-blue-400" />
@@ -596,14 +640,14 @@ const AdminDashboard = () => {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search workshops..." 
+                  <input
+                    type="text"
+                    placeholder="Search workshops..."
                     className="pl-10 pr-4 py-2 bg-gray-700 rounded-lg text-white border-none focus:ring-2 focus:ring-blue-500 w-64"
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center gap-2">
+                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center gap-2 transform hover:scale-105">
                   <span>Add Workshop</span>
                   <span className="text-lg">+</span>
                 </button>
@@ -614,16 +658,22 @@ const AdminDashboard = () => {
                 {workshops
                   .filter(workshop => workshop.name.toLowerCase().includes(searchTerm.toLowerCase()))
                   .map((workshop, index) => (
-                    <div key={index} className="bg-gray-700 rounded-xl overflow-hidden hover:shadow-lg transition">
-                      <div className="h-32 bg-gradient-to-r from-blue-600 to-blue-400 relative">
+                    <div key={index} className="bg-gray-700 rounded-xl overflow-hidden hover:shadow-xl transition-all transform hover:scale-105">
+                      <div className="h-32 relative">
+                        <img
+                          src={workshop.image || `https://via.placeholder.com/300x128?text=${encodeURIComponent(workshop.name)}`}
+                          alt={workshop.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.target.src = `https://via.placeholder.com/300x128?text=${encodeURIComponent(workshop.name)}`; }}
+                        />
                         <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/70 to-transparent">
                           <h4 className="text-white font-semibold text-lg">{workshop.name}</h4>
                         </div>
                       </div>
                       <div className="p-4">
                         <p className="text-gray-300 text-sm mb-3">
-                          {workshop.description.length > 80 
-                            ? `${workshop.description.substring(0, 80)}...` 
+                          {workshop.description.length > 80
+                            ? `${workshop.description.substring(0, 80)}...`
                             : workshop.description}
                         </p>
                         <div className="flex justify-between items-center">
@@ -641,7 +691,7 @@ const AdminDashboard = () => {
         );
       case "appointments":
         return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
             <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <Calendar size={18} className="text-blue-400" />
@@ -650,40 +700,40 @@ const AdminDashboard = () => {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search appointments..." 
+                  <input
+                    type="text"
+                    placeholder="Search appointments..."
                     className="pl-10 pr-4 py-2 bg-gray-700 rounded-lg text-white border-none focus:ring-2 focus:ring-blue-500 w-64"
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div className="flex gap-2">
-                  <button className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">Today</button>
-                  <button className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">All</button>
+                  <button className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition transform hover:scale-105">Today</button>
+                  <button className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition transform hover:scale-105">All</button>
                 </div>
               </div>
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Total</p>
                   <p className="text-white text-xl font-bold">{appointments.length}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Confirmed</p>
                   <p className="text-green-400 text-xl font-bold">{appointments.filter(a => a.status === "confirmed").length}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Pending</p>
                   <p className="text-yellow-400 text-xl font-bold">{appointments.filter(a => a.status === "pending").length}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Cancelled</p>
                   <p className="text-red-400 text-xl font-bold">{appointments.filter(a => a.status === "cancelled").length}</p>
                 </div>
               </div>
               <Table
-                data={appointments.filter(appt => 
+                data={appointments.filter(appt =>
                   appt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                   appt.workshop.toLowerCase().includes(searchTerm.toLowerCase())
                 )}
@@ -729,7 +779,7 @@ const AdminDashboard = () => {
         );
       case "spareParts":
         return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
             <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <ShoppingCart size={18} className="text-blue-400" />
@@ -745,7 +795,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center gap-2">
+                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center gap-2 transform hover:scale-105">
                   <span>Add Spare Part</span>
                   <span className="text-lg">+</span>
                 </button>
@@ -753,15 +803,15 @@ const AdminDashboard = () => {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Total Items</p>
                   <p className="text-white text-xl font-bold">{spareParts.length}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Total Value</p>
                   <p className="text-white text-xl font-bold">${calculateTotalInventoryValue()}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Average Price</p>
                   <p className="text-white text-xl font-bold">${getAveragePrice()}</p>
                 </div>
@@ -785,7 +835,7 @@ const AdminDashboard = () => {
         );
       case "payments":
         return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
             <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <CreditCard size={18} className="text-blue-400" />
@@ -805,15 +855,15 @@ const AdminDashboard = () => {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Total Revenue</p>
                   <p className="text-white text-xl font-bold">${payments.reduce((sum, payment) => sum + payment.productPrice, 0).toFixed(2)}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Average Transaction</p>
                   <p className="text-white text-xl font-bold">${(payments.reduce((sum, payment) => sum + payment.productPrice, 0) / (payments.length || 1)).toFixed(2)}</p>
                 </div>
-                <div className="bg-gray-700 p-4 rounded-xl">
+                <div className="bg-gray-700 p-4 rounded-xl transform hover:scale-105 transition-all">
                   <p className="text-gray-400 text-sm mb-1">Total Transactions</p>
                   <p className="text-white text-xl font-bold">{payments.length}</p>
                 </div>
@@ -836,7 +886,7 @@ const AdminDashboard = () => {
         );
       case "reports":
         return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition-all">
             <div className="px-6 py-4 border-b border-gray-700">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                 <FileText size={18} className="text-blue-400" />
@@ -847,111 +897,27 @@ const AdminDashboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <button
                   onClick={() => generateReport("workshop")}
-                  className="bg-gray-700 p-4 rounded-xl hover:bg-gray-600 transition"
+                  className="bg-gray-700 p-4 rounded-xl hover:bg-gray-600 transition transform hover:scale-105"
                 >
                   <p className="text-white font-medium">Workshop Performance</p>
                   <p className="text-gray-400 text-sm mt-1">Analyze workshop efficiency and appointments</p>
                 </button>
                 <button
                   onClick={() => generateReport("payment")}
-                  className="bg-gray-700 p-4 rounded-xl hover:bg-gray-600 transition"
+                  className="bg-gray-700 p-4 rounded-xl hover:bg-gray-600 transition transform hover:scale-105"
                 >
                   <p className="text-white font-medium">Payment Summary</p>
                   <p className="text-gray-400 text-sm mt-1">View financial transactions and revenue</p>
                 </button>
                 <button
                   onClick={() => generateReport("appointment")}
-                  className="bg-gray-700 p-4 rounded-xl hover:bg-gray-600 transition"
+                  className="bg-gray-700 p-4 rounded-xl hover:bg-gray-600 transition transform hover:scale-105"
                 >
                   <p className="text-white font-medium">Appointment Statistics</p>
                   <p className="text-gray-400 text-sm mt-1">Track appointment trends and statuses</p>
                 </button>
               </div>
               {renderReport()}
-            </div>
-          </div>
-        );
-      case "users":
-        return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Users size={18} className="text-blue-400" />
-                User Management
-              </h3>
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search users..."
-                    className="pl-10 pr-4 py-2 bg-gray-700 rounded-lg text-white border-none focus:ring-2 focus:ring-blue-500 w-64"
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition flex items-center gap-2">
-                  <span>Add User</span>
-                  <span className="text-lg">+</span>
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <Table
-                data={[]} // Placeholder for user data
-                columns={["Name", "Email", "Role", "Status"]}
-                renderRow={(user) => [
-                  user.name || "N/A",
-                  user.email || "N/A",
-                  user.role || "N/A",
-                  user.status || "N/A",
-                  <div className="flex gap-2">
-                    <button className="text-blue-400 hover:text-blue-300">Edit</button>
-                    <button className="text-red-400 hover:text-red-300">Delete</button>
-                  </div>
-                ]}
-              />
-            </div>
-          </div>
-        );
-      case "settings":
-        return (
-          <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-700">
-              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Settings size={18} className="text-blue-400" />
-                Settings
-              </h3>
-            </div>
-            <div className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-white font-medium mb-2">General Settings</h4>
-                  <div className="bg-gray-700 p-4 rounded-xl">
-                    <label className="block text-sm text-gray-400 mb-2">Business Name</label>
-                    <input
-                      type="text"
-                      className="w-full bg-gray-600 rounded-lg p-2 text-white border-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter business name"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-white font-medium mb-2">Notification Preferences</h4>
-                  <div className="bg-gray-700 p-4 rounded-xl space-y-2">
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" className="form-checkbox text-blue-500" />
-                      <span className="text-gray-300 text-sm">Email notifications</span>
-                    </label>
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" className="form-checkbox text-blue-500" />
-                      <span className="text-gray-300 text-sm">SMS notifications</span>
-                    </label>
-                  </div>
-                </div>
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-                  Save Changes
-                </button>
-              </div>
             </div>
           </div>
         );
@@ -963,21 +929,21 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-900">
-        <div className="text-white text-lg">Loading...</div>
+        <div className="text-white text-lg animate-pulse">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-gray-900">
+    <div className={`flex h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} transition-colors duration-300`}>
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 ${darkMode ? 'bg-gray-800' : 'bg-white'} transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out`}
+        } md:relative md:translate-x-0 transition-transform duration-300 ease-in-out shadow-lg`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h1 className="text-white text-xl font-bold">Admin Dashboard</h1>
+          <h1 className={`${darkMode ? 'text-white' : 'text-gray-900'} text-xl font-bold`}>Admin Dashboard</h1>
           <button onClick={toggleSidebar} className="md:hidden text-white">
             <X size={24} />
           </button>
@@ -990,8 +956,6 @@ const AdminDashboard = () => {
             { id: "spareParts", icon: ShoppingCart, label: "Spare Parts" },
             { id: "payments", icon: CreditCard, label: "Payments" },
             { id: "reports", icon: FileText, label: "Reports" },
-            { id: "users", icon: Users, label: "Users" },
-            { id: "settings", icon: Settings, label: "Settings" },
           ].map((item) => (
             <button
               key={item.id}
@@ -999,8 +963,8 @@ const AdminDashboard = () => {
               className={`flex items-center gap-3 w-full p-3 rounded-lg text-sm ${
                 activeTab === item.id
                   ? "bg-blue-600 text-white"
-                  : "text-gray-300 hover:bg-gray-700"
-              }`}
+                  : `${darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-200'}`
+              } transition-all`}
             >
               <item.icon size={18} />
               {item.label}
@@ -1008,7 +972,9 @@ const AdminDashboard = () => {
           ))}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full p-3 rounded-lg text-sm text-gray-300 hover:bg-gray-700"
+            className={`flex items-center gap-3 w-full p-3 rounded-lg text-sm ${
+              darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-200'
+            } transition-all`}
           >
             <LogOut size={18} />
             Logout
@@ -1019,18 +985,24 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+        <header className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b p-4 flex items-center justify-between shadow-sm`}>
           <div className="flex items-center gap-4">
             <button onClick={toggleSidebar} className="md:hidden text-white">
               <Menu size={24} />
             </button>
-            <h2 className="text-white text-lg font-semibold capitalize">{activeTab}</h2>
+            <h2 className={`${darkMode ? 'text-white' : 'text-gray-900'} text-lg font-semibold capitalize`}>{activeTab}</h2>
           </div>
           <div className="flex items-center gap-4">
+            <button
+              onClick={toggleDarkMode}
+              className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition`}
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
             <div className="relative">
               <button
                 onClick={toggleNotifications}
-                className="text-gray-300 hover:text-white relative"
+                className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} relative transition`}
               >
                 <Bell size={20} />
                 {unreadNotifications > 0 && (
@@ -1040,12 +1012,12 @@ const AdminDashboard = () => {
                 )}
               </button>
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
-                  <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                    <h3 className="text-white text-sm font-medium">Notifications</h3>
+                <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} absolute right-0 mt-2 w-80 rounded-lg shadow-lg border ${darkMode ? 'border-gray-700' : 'border-gray-200'} z-10 animate-fade-in`}>
+                  <div className="p-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-between items-center">
+                    <h3 className={`${darkMode ? 'text-white' : 'text-gray-900'} text-sm font-semibold`}>Notifications</h3>
                     <button
                       onClick={markAllNotificationsAsRead}
-                      className="text-blue-400 text-xs hover:text-blue-300"
+                      className={`text-xs ${darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-600 hover:text-gray-900'}`}
                     >
                       Mark all as read
                     </button>
@@ -1054,29 +1026,30 @@ const AdminDashboard = () => {
                     {notifications.map((notif) => (
                       <div
                         key={notif.id}
-                        className={`p-4 border-b border-gray-700 ${
-                          notif.read ? "bg-gray-800" : "bg-gray-700"
-                        }`}
+                        className={`p-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'} flex items-center gap-3 ${notif.read ? 'opacity-60' : ''}`}
                       >
-                        <p className="text-white text-sm">{notif.message}</p>
-                        <p className="text-gray-400 text-xs mt-1">{notif.time}</p>
+                        <div className={`p-2 rounded-full ${notif.read ? 'bg-gray-500/20 text-gray-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                          <Bell size={16} />
+                        </div>
+                        <div>
+                          <p className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'} ${notif.read ? 'font-normal' : 'font-medium'}`}>
+                            {notif.message}
+                          </p>
+                          <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{notif.time}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                A
-              </div>
-              <span className="text-white text-sm">Admin</span>
-            </div>
           </div>
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6">{renderContent()}</main>
+        <main className="flex-1 overflow-y-auto p-6">
+          {renderContent()}
+        </main>
       </div>
     </div>
   );
