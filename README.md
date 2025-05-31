@@ -35,6 +35,26 @@ Pusher	Real-time push notifications
 1-Home Screen:
 ![1](https://github.com/user-attachments/assets/8cc7b1be-f1d9-4261-bc89-5e5618cc0542)
 
+2-Sign-Up:
+![2](https://github.com/user-attachments/assets/34066b66-814d-4c39-896e-da4e5b2d74eb)
+![3](https://github.com/user-attachments/assets/6fc84cb7-272b-47cc-8d9f-0b27fab377c3)
+
+3-Login:
+![4](https://github.com/user-attachments/assets/0936d03f-c23d-4c7c-9e4d-e0c541d2c80a)
+
+4-Admin Dashboard:
+
+![11](https://github.com/user-attachments/assets/012c5d56-5ba0-4573-8ecf-f031f7ac1442)
+![10](https://github.com/user-attachments/assets/9e393c27-bfd8-4f7b-b2b1-fb86bedc74ae)
+![9](https://github.com/user-attachments/assets/5d840d4b-7052-4d33-ad65-560ab23e22bc)
+![8](https://github.com/user-attachments/assets/1bac8c4b-b137-4ae0-bc65-66d79a0701b6)
+![7](https://github.com/user-attachments/assets/25b28bab-6c27-4cc0-b44c-3a431692cb98)
+![6](https://github.com/user-attachments/assets/073f0adf-4e8a-4975-96ea-348afefff3ff)
+![5](https://github.com/user-attachments/assets/56565d4d-41fb-47fd-9a71-7b9ab909dadc)
+![12](https://github.com/user-attachments/assets/208c4da6-1f81-491e-8fa6-e7e9f296e9ac)
+
+
+
 
 
 
