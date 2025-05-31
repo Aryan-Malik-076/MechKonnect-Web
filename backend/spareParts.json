@@ -68,5 +68,11 @@
     "price": 17.99,
     "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SIfmqGWXssHp8LuDgr1skNfmeR_q33-WQg&s",
     "discount": 10
+  },{
+    "name": "EngineS Oil",
+    "description": "Synthetic engine oil for maximum performance.",
+    "price": 29.99,
+    "imageUrl": "https://media.istockphoto.com/id/1325588832/photo/pouring-motor-oil-for-motor-vehicles-from-a-gray-bottle-into-the-engine.jpg?s=612x612&w=0&k=20&c=8El-cOoOpGSDz-dOjozJn5ijlFOuE1WGQA1hsZvyyMk=",
+    "discount": 15
   }
 ]

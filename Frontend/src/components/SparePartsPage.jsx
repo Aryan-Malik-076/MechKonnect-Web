@@ -6,7 +6,7 @@ import Carousel from "./Carousel";
 import Card from "./Card";
 
 const sparePartsImages = [
-  "https://img.freepik.com/free-photo/mechanic-hand-checking-fixing-broken-car-car-service-garage_146671-19718.jpg?t=st=1739710075~exp=1739713675~hmac=8df0c96c34ec95136f29cfa2093859a27adbc4bfd3f27794e7cd5d54b1dc0327&w=996",
+  "https://media.istockphoto.com/id/1319939893/photo/car-is-standing-on-the-breakdown-lane-asphalt-and-tyre-italy.jpg?s=612x612&w=0&k=20&c=8e94VWra2DQqm-Dgv9J1Eieab4ctwpwCK5qqPFFtqno=",
   "https://img.freepik.com/free-photo/mechanic-repairing-car-engine-workshop_1232-3435.jpg",
   "https://img.freepik.com/free-photo/mechanic-checking-car-engine-auto-repair-garage_1232-3574.jpg",
 ];
