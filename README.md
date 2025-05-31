@@ -32,6 +32,10 @@ Pusher	Real-time push notifications
 
 🖼️ Screenshots:
 
+1-Home Screen:
+/assets/screenshots/1.png
+
+
 1-Welocme Screen:
 ![Uploading 1.png…]()
 
