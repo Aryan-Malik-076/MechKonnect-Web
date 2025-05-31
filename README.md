@@ -53,6 +53,57 @@ Pusher	Real-time push notifications
 ![5](https://github.com/user-attachments/assets/56565d4d-41fb-47fd-9a71-7b9ab909dadc)
 ![12](https://github.com/user-attachments/assets/208c4da6-1f81-491e-8fa6-e7e9f296e9ac)
 
+5-Home Screen:
+![13](https://github.com/user-attachments/assets/ba65f142-0a01-45fe-b7e8-88bcb74333dd)
+![14](https://github.com/user-attachments/assets/0c044dbb-6a39-499c-8d17-9ab3a4b405cf)
+
+6-Workshops:
+![15](https://github.com/user-attachments/assets/5b52d6cb-ee9b-434d-bf2b-fd7e7d4439b0)
+![16](https://github.com/user-attachments/assets/d6b13a75-8349-488a-92c0-767ba04f92b7)
+
+7-SpareParts/Payments:
+![18](https://github.com/user-attachments/assets/552f3d4e-ac93-4edc-a768-fba5976fce79)
+![17](https://github.com/user-attachments/assets/6731ffdc-8e62-4b10-99b5-aad55f795a0e)
+![21](https://github.com/user-attachments/assets/2c1fe21e-aa5b-41bb-a714-43314a7e34b8)
+![20](https://github.com/user-attachments/assets/2a3314c4-08a2-4bd9-bab9-69e5302628bf)
+![19](https://github.com/user-attachments/assets/284761a2-5146-43fb-981d-30ed17809c4f)
+
+8-Requets:
+![22](https://github.com/user-attachments/assets/38141f9e-4c77-4a33-8f01-93fdb80060da)
+![23](https://github.com/user-attachments/assets/a96156d1-97ce-4aea-8b2e-7f73523d4bf3)
+
+9-Maps:
+![30](https://github.com/user-attachments/assets/e77112a3-09b0-4145-ad68-e401fa0a7ece)
+![29](https://github.com/user-attachments/assets/00e169a2-b62a-49c1-b8ff-b570b7969db1)
+![28](https://github.com/user-attachments/assets/a829023a-6be4-43d9-8759-73b36b55140c)
+![27](https://github.com/user-attachments/assets/1015b475-a69e-4467-8051-d886468134b3)
+![26](https://github.com/user-attachments/assets/c1c7a915-7702-4951-81dd-aa8a5c079fae)
+![25](https://github.com/user-attachments/assets/d01c0519-031d-4ab6-afb5-96252e320244)
+![24](https://github.com/user-attachments/assets/2efc9d89-aedf-4130-9387-e088d66e1df7)
+![38](https://github.com/user-attachments/assets/b7d1ce39-b3cc-485d-a931-8dca2cfd9b3b)
+![37](https://github.com/user-attachments/assets/28a19674-e22f-4804-8d32-ac165630cd32)
+![36](https://github.com/user-attachments/assets/0b17f364-96d8-46e9-ae31-a509764de0e9)
+![35](https://github.com/user-attachments/assets/f14ac871-79ac-482b-b389-92f203c4cf75)
+![34](https://github.com/user-attachments/assets/98aa3aa0-9c75-4c95-b7ec-04fe30c759ce)
+![33](https://github.com/user-attachments/assets/92dfcadf-82c5-4c56-a3b3-4d037eebc582)
+![31](https://github.com/user-attachments/assets/3da62b6e-f65e-454a-938f-509571fadeae)
+
+📦 Installation:
+
+# Clone the repo
+git clone https://github.com/Aryan-Malik-076/MechKonnect-Web.git
+cd mechkonnect-web
+
+# Install dependencies
+npm install
+
+# Run the development server
+npm start
+
+
+
+
+
 
 
 
