@@ -14,9 +14,10 @@
 </div>
 
 
-🚀 About MechKonnect
+**🚀 About MechKonnect:**
 MechKonnect Web is a cutting-edge roadside assistance platform that revolutionizes how drivers connect with automotive professionals. Our intelligent matching system uses real-time location data to instantly connect users with nearby mechanics, towing services, and auto-care specialists, ensuring help is always just a tap away.
-🎯 Why Choose MechKonnect?
+
+**🎯 Why Choose MechKonnect?:**
 
 ⚡ Instant Connection - Get help in under 60 seconds
 📍 Smart Location Matching - AI-powered proximity detection
@@ -24,40 +25,32 @@ MechKonnect Web is a cutting-edge roadside assistance platform that revolutioniz
 🔒 Secure Transactions - End-to-end encrypted payments
 👩‍🔧 Inclusive Services - Women-driven cab services and specialized support
 
-
-✨ Key Features
-🔍 Smart Mechanic Discovery
+**
+✨ Key Features:**
+**🔍 Smart Mechanic Discovery**
 Find qualified mechanics within your vicinity using advanced geolocation algorithms and real-time availability tracking.
-🗺️ Interactive Map Experience
+**🗺️ Interactive Map Experience**
 
 Live tracking of service providers
 Real-time location updates
 Route optimization for fastest response times
 Multi-layer map visualization
 
-💳 Seamless Payment Integration
+**💳 Seamless Payment Integration**
 
 Secure Stripe-powered transactions
 Transparent pricing with upfront estimates
 Multiple payment methods supported
 Automated billing and receipts
 
-🛒 Comprehensive Spare Parts Marketplace
+**🛒 Comprehensive Spare Parts Marketplace**
 
 Extensive catalog of automotive parts
 Price comparison across vendors
 Quality assurance and warranty tracking
 Direct-to-location delivery options
 
-🚗 She-Cab Services
-Empowering women in the automotive industry with:
-
-Women-driven towing services
-Female mechanic network
-Safety-first approach
-24/7 specialized support
-
-🔄 Dual-Interface System
+**🔄 Dual-Interface System**
 For Users:
 
 Intuitive service request workflow
@@ -65,22 +58,15 @@ Real-time tracking and updates
 Service history and ratings
 Emergency assistance features
 
-For Service Providers:
+**For Service Providers:**
 
 Professional dashboard
 Job management system
 Earnings tracking
 Customer communication tools
 
-📱 Advanced Communication
-
-Real-time messaging via WebSockets
-Push notifications for instant updates
-Multi-media file sharing
-Video call integration for complex diagnostics
-
-
-🛠️ Technology Arsenal
+**
+🛠️ Technology Arsenal**
 <table>
 <tr>
 <td align="center" width="200px">
@@ -105,6 +91,27 @@ Video call integration for complex diagnostics
 </td>
 </tr>
 </table>
-🔧 Additional Technologies
-ComponentTechnologyPurposeReal-time CommunicationSocket.ioLive tracking & instant messagingPayment ProcessingStripe APISecure financial transactionsMaps & GeolocationLeaflet.js + OpenStreetMapInteractive mapping experienceFile ManagementMulterImage uploads & media handlingPush NotificationsPusherReal-time alerts & updates
+**🔧 Additional Technologies**
+### 🛠️ Component Technologies Used
+
+| **Component**            | **Technology**              | **Purpose**                                |
+|--------------------------|-----------------------------|---------------------------------------------|
+| Real-time Communication  | Socket.io                   | Live tracking & instant messaging           |
+| Payment Processing       | Stripe API                  | Secure financial transactions               |
+| Maps & Geolocation       | Leaflet.js + OpenStreetMap  | Interactive mapping experience              |
+| File Management          | Multer                      | Image uploads & media handling              |
+| Push Notifications       | Pusher                      | Real-time alerts & updates                  |
+
+📸 Application Showcase
+🏠 Welcome Experience
+<details>
+<summary>Click to view Home Screen</summary>
+![14](https://github.com/user-attachments/assets/0e91704f-51da-4f31-90e9-59e68ffcf9dd)
+![13](https://github.com/user-attachments/assets/0f2f0179-8c16-4e10-b055-ca0455a835c5)
+
+Clean, intuitive interface designed for quick access to emergency services
+</details>
+
+
+
 
