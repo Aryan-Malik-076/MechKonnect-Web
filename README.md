@@ -112,6 +112,21 @@ Customer communication tools
 Clean, intuitive interface designed for quick access to emergency services
 </details>
 
+👤 User Onboarding
+<details>
+<summary>Click to view Authentication Flow</summary>
+Sign Up Process:
+![2](https://github.com/user-attachments/assets/ae202c71-0881-4b9d-ab6b-4ad290a8fc03)
+![3](https://github.com/user-attachments/assets/4ef94457-e8c5-4f8f-8e96-52e99572d16b)
+
+Login Interface:
+![4](https://github.com/user-attachments/assets/6b392607-1a2a-4e1a-b8e3-db4ce5dedc6d)
+
+Streamlined authentication with social login options
+</details>
+
+
+
 
 
 
