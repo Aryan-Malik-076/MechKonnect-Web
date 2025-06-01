@@ -65,8 +65,8 @@ Job management system
 Earnings tracking
 Customer communication tools
 
-**
-🛠️ Technology Arsenal**
+
+**🛠️ Technology Arsenal**
 <table>
 <tr>
 <td align="center" width="200px">
@@ -80,7 +80,7 @@ Customer communication tools
 <br><em>Backend Runtime</em>
 </td>
 <td align="center" width="200px">
-<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original.svg" width="50" height="50" alt="Express"/>
+<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" width="80" height="50" alt="Express" style="background-color: white; padding: 5px; border-radius: 5px;"/>
 <br><strong>Express.js</strong>
 <br><em>Web Framework</em>
 </td>
@@ -91,8 +91,10 @@ Customer communication tools
 </td>
 </tr>
 </table>
+
 **🔧 Additional Technologies**
-### 🛠️ Component Technologies Used
+
+🛠️ Component Technologies Used
 
 | **Component**            | **Technology**              | **Purpose**                                |
 |--------------------------|-----------------------------|---------------------------------------------|
