@@ -106,6 +106,7 @@ Customer communication tools
 🏠 Welcome Experience
 <details>
 <summary>Click to view Home Screen</summary>
+  
 ![14](https://github.com/user-attachments/assets/0e91704f-51da-4f31-90e9-59e68ffcf9dd)
 ![13](https://github.com/user-attachments/assets/0f2f0179-8c16-4e10-b055-ca0455a835c5)
 
@@ -116,6 +117,7 @@ Clean, intuitive interface designed for quick access to emergency services
 <details>
 <summary>Click to view Authentication Flow</summary>
 Sign Up Process:
+  
 ![2](https://github.com/user-attachments/assets/ae202c71-0881-4b9d-ab6b-4ad290a8fc03)
 ![3](https://github.com/user-attachments/assets/4ef94457-e8c5-4f8f-8e96-52e99572d16b)
 
@@ -123,6 +125,54 @@ Login Interface:
 ![4](https://github.com/user-attachments/assets/6b392607-1a2a-4e1a-b8e3-db4ce5dedc6d)
 
 Streamlined authentication with social login options
+</details>
+
+📊 Administrative Control Center
+<details>
+<summary>Click to view Admin Dashboard</summary>
+
+![11](https://github.com/user-attachments/assets/49b92997-8aa6-42c8-aab0-e3432f9a35c2)
+![7](https://github.com/user-attachments/assets/21e88e15-2546-484e-9b91-09141d8d1355)
+![6](https://github.com/user-attachments/assets/7466defe-6585-4666-9585-492296193c6e)
+![5](https://github.com/user-attachments/assets/f99f7e93-c396-4df9-a510-68e827b91382)
+![12](https://github.com/user-attachments/assets/07e291ae-f72e-4197-9aa1-de7f71fb400e)
+
+
+Comprehensive admin tools for platform management and analytics
+</details>
+🔧 Service Provider Network
+<details>
+<summary>Click to view Workshop Management</summary>
+  
+  ![16](https://github.com/user-attachments/assets/e89346f2-897a-4266-83ba-368b18027908)
+![15](https://github.com/user-attachments/assets/a7037c76-6efd-4fdb-bb9e-e4218f5f0301)
+
+
+Professional profiles and service capability management
+</details>
+🛒 Marketplace & Payments
+<details>
+<summary>Click to view E-commerce Integration</summary>
+  
+  ![20](https://github.com/user-attachments/assets/07877618-168a-4704-b249-23c2f61e9743)
+![19](https://github.com/user-attachments/assets/fcc4a907-b797-4e30-b703-98b7a15131e6)
+![18](https://github.com/user-attachments/assets/aa121e91-4502-407b-b34b-2352b947621e)
+
+
+Integrated marketplace with secure payment processing
+</details>
+🗺️ Real-time Tracking System
+<details>
+<summary>Click to view Map Features</summary>
+  
+![37](https://github.com/user-attachments/assets/fa2f5f20-6ffc-468e-827a-e79eef5d0950)
+![36](https://github.com/user-attachments/assets/db7f4164-3f19-4e2d-80fb-1e61324a8621)
+![35](https://github.com/user-attachments/assets/fe141404-b333-4380-ae59-67b28b746a9b)
+![27](https://github.com/user-attachments/assets/3955a5d3-2ef6-452e-9572-7220e949cdc0)
+![26](https://github.com/user-attachments/assets/63c43956-88a8-4be3-b0ab-5341bb806ecd)
+![25](https://github.com/user-attachments/assets/0760bac5-8637-41d4-997d-88c2baf62b74)
+
+Advanced mapping with real-time location tracking and route optimization
 </details>
 
 
