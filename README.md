@@ -175,6 +175,51 @@ Integrated marketplace with secure payment processing
 Advanced mapping with real-time location tracking and route optimization
 </details>
 
+**🚀 Quick Start Guide**
+**Prerequisites**
+
+Node.js (v14.0 or higher)
+MongoDB (v4.4 or higher)
+npm or yarn package manager
+
+**Installation****
+
+Clone the Repository
+bashgit clone https://github.com/Aryan-Malik-076/MechKonnect-Web.git
+cd MechKonnect-Web
+
+**Install Dependencies**
+bashnpm install
+# or
+yarn install
+
+**Launch Development Server****
+bashnpm start
+# or
+yarn start
+
+**Access Application**
+🌐 Frontend: http://localhost:3000
+🔧 Backend API: http://localhost:5000
+
+**🤝 Contributing**
+We welcome contributions from the developer community! Please read our Contributing Guidelines before submitting pull requests.
+Development Workflow
+
+**Fork the repository**
+Create a feature branch (git checkout -b feature/AmazingFeature)
+Commit your changes (git commit -m 'Add some AmazingFeature')
+Push to the branch (git push origin feature/AmazingFeature)
+Open a Pull Request
+
+<div align="center">
+Made with ❤️ by the MechKonnect Team
+
+Connecting drivers with trusted automotive professionals, one click at a time.
+
+</div>
+
+
 
 
 
